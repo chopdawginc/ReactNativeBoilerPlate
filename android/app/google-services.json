@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "1071120133514",
+    "project_id": "pushnotification-9f4b5",
+    "storage_bucket": "pushnotification-9f4b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071120133514:android:b03b2972ac48cae3492c73",
+        "android_client_info": {
+          "package_name": "com.rashbi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071120133514-5d6b01acu8iq603dc900fkubv77h38vc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW340QQv68oUf0Lpv1ikH1mXYg0-Kb-1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071120133514-5d6b01acu8iq603dc900fkubv77h38vc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071120133514:android:a92cbd299c3f71c3492c73",
+        "android_client_info": {
+          "package_name": "com.reactnativeboilerplate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071120133514-5d6b01acu8iq603dc900fkubv77h38vc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW340QQv68oUf0Lpv1ikH1mXYg0-Kb-1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071120133514-5d6b01acu8iq603dc900fkubv77h38vc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
