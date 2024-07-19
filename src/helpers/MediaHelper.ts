@@ -50,4 +50,4 @@ export const isIOS = () => {
 
 export const emptyFunction = () => { }
 
-export * from './firebaseServices'
+export * from '../DatabaseServices/tempService'

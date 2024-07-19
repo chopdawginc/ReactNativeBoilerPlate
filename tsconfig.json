@@ -34,7 +34,7 @@
         "./src/contexts/"
       ],
       "@helpers": [
-        "./src/helpers/"
+        "src/DatabaseServices"
       ],
       "@hooks": [
         "./src/hooks/"
