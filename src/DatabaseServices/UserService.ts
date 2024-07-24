@@ -1,20 +1,24 @@
 // userService.ts
-import Firestore from '@react-native-firebase/firestore'
-import { BaseService } from './BaseService';
-import { User } from '../collections/user';
+import { BaseService } from './BaseService'
+import { User } from '../collections/user'
+import { FIREBASE_COLLECTION } from '@enums'
 
 export class UserService extends BaseService<User> {
-  constructor(firestore: Firestore) {
-    super(firestore, 'users');
+  constructor() {
+    super(FIREBASE_COLLECTION.USERS)
   }
 
   // Add custom operations specific to the User schema
 
+  async findById(id: string): Promise<User | null> {
+    return await this.read(id) as User
+  }
+
   async findByEmail(email: string): Promise<User | null> {
-    const snapshot = await this.collection.where('email', '==', email).get();
+    const snapshot = await this.collection.where('email', '==', email).get()
     if (snapshot.empty) {
-      return null;
+      return null
     }
-    return snapshot.docs[0].data() as User;
+    return snapshot.docs[0].data() as User
   }
 }
