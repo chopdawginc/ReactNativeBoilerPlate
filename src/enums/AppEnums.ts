@@ -1,6 +1,7 @@
 
 export enum FIREBASE_COLLECTION {
     USERS = 'users',
+    PRODUCTS = 'products',
 }
 
 export enum STORAGE {
