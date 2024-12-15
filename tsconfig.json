@@ -3,10 +3,7 @@
     "target": "esnext",
     "module": "commonjs",
     "noImplicitAny": false,
-    "lib": [
-      "es2017",
-      "DOM"
-    ],
+    "lib": ["es2017", "DOM"],
     "allowJs": true,
     "jsx": "react-native",
     "noEmit": true,
@@ -16,56 +13,27 @@
     "noUnusedParameters": true,
     "moduleResolution": "node",
     "baseUrl": "./",
-    "typeRoots": [
-      "node_modules/@types",
-      "./src/**"
-    ],
+    "typeRoots": ["node_modules/@types", "./src/**"],
     "paths": {
-      "@src": [
-        "./src/*"
-      ],
-      "@assets": [
-        "./src/assets/"
-      ],
-      "@common": [
-        "src/common"
-      ],
-      "@contexts": [
-        "./src/contexts/"
-      ],
-      "@helpers": [
-        "src/DatabaseServices"
-      ],
-      "@hooks": [
-        "./src/hooks/"
-      ],
-      "@navigation": [
-        "./src/navigation/"
-      ],
-      "@types": [
-        "./src/types/"
-      ],
-      "@enums": [
-        "./src/enums/"
-      ],
-      "@enums/StyleGuide": [
-        "./src/enums/StyleGuide.ts"
-      ],
-      "@modules": [
-        "./src/modules"
-      ],
+      "@src": ["./src/*"],
+      "@assets": ["./src/assets/"],
+      "@common": ["src/common"],
+      "@contexts": ["./src/contexts/"],
+      "@database": ["src/DatabaseServices"],
+      "@utils": ["src/utils"],
+      "@hooks": ["./src/hooks/"],
+      "@hocs": ["./src/hocs/"],
+      "@styles": ["./src/styles/"],
+      "@navigation": ["./src/navigation/"],
+      "@types": ["./src/types/"],
+      "@constant": ["./src/constant/"],
+      "@modules": ["./src/modules"]
     },
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
-  "include": [
-    "./**/*",
-    "*.tsx",
-    "*.json",
-    "*.tff",
-    "typings/**/*.d.ts"
-  ],
+  "include": ["./**/*", "*.tsx", "*.json", "*.tff", "typings/**/*.d.ts"],
   "exclude": [
     "node_modules",
     "babel.config.js",

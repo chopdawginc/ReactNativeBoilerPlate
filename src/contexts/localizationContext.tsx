@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import i18n from 'i18next'
-import { KEYS } from '@enums'
+import { KEYS } from '@constant'
 import { en, fr } from '../languages'
 import { useAsyncStorage } from '@hooks'
 import { LocalizationContextType, ProviderProps } from '@types'
