@@ -75,9 +75,17 @@ export interface ProviderProps {
 
 // Interface for button properties, used in button components
 export interface ButtonProps {
+<<<<<<< HEAD
   text: string; // Text to be displayed on the button
   style?: ViewStyle; // Optional style for the button
   onPress?: Function; // Optional function to handle button press
   isLoading?: Boolean; // Optional flag to indicate loading state
   textStyle?: TextStyle; // Optional style for the button text
+=======
+    text: string
+    style?: ViewStyle
+    onPress?: Function
+    isLoading?: Boolean
+    textStyle?: TextStyle
+>>>>>>> develop
 }

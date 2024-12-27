@@ -12,8 +12,8 @@ export const RootNavigation = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={screenOptionStyle}>
-                <Stack.Screen name={SCREEN.LOGIN} component={ui.LoginScreen} />
                 <Stack.Screen name={SCREEN.SIGNUP} component={ui.SignupScreen} />
+                <Stack.Screen name={SCREEN.LOGIN} component={ui.LoginScreen} />
                 <Stack.Screen name={SCREEN.EDIT_PROFILE} component={ui.EditProfile} />
             </Stack.Navigator>
         </NavigationContainer>

@@ -6,7 +6,6 @@ import { usePermissions } from '@hooks'
 import { useLocalization, useTheme } from '@contexts'
 
 const LoginScreen = () => {
-
     const { THEME_COLOR, toggleTheme } = useTheme()
     const { permissions, requestPermission } = usePermissions()
 
