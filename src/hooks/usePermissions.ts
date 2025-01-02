@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
 import { useState, useEffect } from 'react'
-import { isIOS } from '@helpers'
-import { PERMISSION } from '@enums'
+import { isIOS } from '@utils'
+import { PERMISSION } from '@constant'
 import { PermissionType, PermissionsState } from '@types'
 import { request, check, PERMISSIONS, RESULTS, PermissionStatus } from 'react-native-permissions'
 

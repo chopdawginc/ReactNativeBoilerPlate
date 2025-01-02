@@ -1,5 +1,5 @@
-import { FIREBASE_COLLECTION, FIREBASE_ERROR, QUERY, STORAGE } from '@enums'
-import { isIOS, showFlash } from '@helpers'
+import { FIREBASE_COLLECTION, FIREBASE_ERROR, QUERY, STORAGE } from '@constant'
+import { isIOS, showFlash } from '@utils'
 import auth from '@react-native-firebase/auth'
 import storage from '@react-native-firebase/storage'
 import firestore from '@react-native-firebase/firestore'

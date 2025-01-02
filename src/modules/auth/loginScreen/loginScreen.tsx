@@ -1,7 +1,7 @@
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { Button, Label } from '@common'
-import { PERMISSION } from '@enums'
+import { PERMISSION } from '@constant'
 import { usePermissions } from '@hooks'
 import { useLocalization, useTheme } from '@contexts'
 

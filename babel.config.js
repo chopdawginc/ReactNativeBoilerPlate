@@ -10,15 +10,17 @@ module.exports = {
           '@assets': './src/assets',
           '@contexts': './src/contexts',
           '@types': './src/types',
-          '@helpers': './src/helpers',
+          '@utils': './src/utils',
+          '@database': './src/DatabaseServices',
           '@hooks': './src/hooks',
+          '@hocs': './src/hocs',
+          '@styles': './src/styles',
           '@navigation': './src/navigation',
-          '@enums': './src/enums',
-          '@enums/StyleGuide': './src/enums/StyleGuide.ts',
+          '@constant': './src/constant',
           '@modules': './src/modules',
           '@common': './src/common',
-        }
-      }
-    ]
-  ]
+        },
+      },
+    ],
+  ],
 };
