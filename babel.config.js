@@ -11,6 +11,7 @@ module.exports = {
           '@contexts': './src/contexts',
           '@types': './src/types',
           '@utils': './src/utils',
+          "@enums": './src/enums/',
           '@database': './src/DatabaseServices',
           '@hooks': './src/hooks',
           '@hocs': './src/hocs',

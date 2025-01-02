@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import jwt_decode from 'jwt-decode'
-import { showFlash } from '@utils'
 import { FIREBASE_COLLECTION } from '@constant'
 import auth from '@react-native-firebase/auth'
-import { getCollectionDataWhere, getDocumentData } from '@database'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { appleAuth } from '@invertase/react-native-apple-authentication'
+import { fetchCollectionDataWithCondition, fetchDocumentData, showFlash } from '@utils'
 
 const useSocialLogins = () => {
     const [userData, setUserData] = useState({})
@@ -17,12 +16,12 @@ const useSocialLogins = () => {
             setGoogleLoading(true)
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true })
             const { user, idToken } = await GoogleSignin.signIn()
-            const users = await getCollectionDataWhere(FIREBASE_COLLECTION.USERS, 'email', user.email)
+            const users = await fetchCollectionDataWithCondition(FIREBASE_COLLECTION.USERS, 'email', user.email)
 
             if (users.length !== 0) {
                 const googleCredential = auth.GoogleAuthProvider.credential(idToken)
                 const { user: firebaseUser } = await auth().signInWithCredential(googleCredential)
-                const userInfo = await getDocumentData(FIREBASE_COLLECTION.USERS, firebaseUser.uid)
+                const userInfo = await fetchDocumentData(FIREBASE_COLLECTION.USERS, firebaseUser.uid)
                 setUserData(userInfo)
             }
             else showFlash('No user exists in our records.')
@@ -50,14 +49,14 @@ const useSocialLogins = () => {
             // @ts-expect-error
             const { email }: any = jwt_decode(appleAuthRequestResponse.identityToken)
 
-            const users = await getCollectionDataWhere(FIREBASE_COLLECTION.USERS, 'email', email)
+            const users = await fetchCollectionDataWithCondition(FIREBASE_COLLECTION.USERS, 'email', email)
 
             if (users.length !== 0) {
                 const { identityToken, nonce } = appleAuthRequestResponse
                 const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce)
                 const { user: firebaseUser } = await auth().signInWithCredential(appleCredential)
 
-                const userInfo = await getDocumentData(FIREBASE_COLLECTION.USERS, firebaseUser.uid)
+                const userInfo = await fetchDocumentData(FIREBASE_COLLECTION.USERS, firebaseUser.uid)
                 setUserData(userInfo)
             } else { showFlash('No user exists in our records.') }
 

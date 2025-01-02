@@ -1,62 +1,117 @@
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
-import { Button, Label } from '@common'
-import { PERMISSION } from '@constant'
-import { usePermissions } from '@hooks'
+import { View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
+import React from 'react'
+import { Formik } from 'formik'
+import { Label } from '@common'
 import { useLocalization, useTheme } from '@contexts'
+import { ILoginFormSchema } from '../../../validations'
+import { AuthService } from '../../../AppServices/AuthService'
 
 const LoginScreen = () => {
-    const { THEME_COLOR, toggleTheme } = useTheme()
-    const { permissions, requestPermission } = usePermissions()
+    const { THEME_COLOR } = useTheme()
+    const auth = new AuthService()
+    const { t } = useLocalization()
 
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const handleLogin = async (values) => {
+        console.log('Login values:', values)
+        // toggleTheme()
 
-    const { t, changeLanguage } = useLocalization()
+        try {
+            const user = await auth.login(values?.email, values?.password)
+            console.log(user)
+        } catch (error) {
+            console.log('Error while logging in', error)
+        }
 
-    const handleLogin = () => {
-        toggleTheme()
     }
 
     return (
-        <View style={[styles.container, { backgroundColor: THEME_COLOR.background }]}>
-            <Label style={[styles.header, { color: THEME_COLOR.primary }]}>{t('welcome')}</Label>
-            <TextInput
-                style={[styles.input, { backgroundColor: THEME_COLOR.secondary, color: THEME_COLOR.text }]}
-                placeholder="Username"
-                placeholderTextColor={THEME_COLOR.text}
-                onChangeText={text => setUsername(text)}
-                value={username}
-            />
-            <TextInput
-                style={[styles.input, { backgroundColor: THEME_COLOR.secondary, color: THEME_COLOR.text }]}
-                placeholder="Password"
-                placeholderTextColor={THEME_COLOR.text}
-                onChangeText={text => setPassword(text)}
-                value={password}
-                secureTextEntry
-            />
-            <View>
-                <Label>{JSON.stringify(permissions)}</Label>
-                <Button text='Request camera' onPress={() => requestPermission(PERMISSION.CAMERA)} />
-                <Button text='Request contacts' onPress={() => requestPermission(PERMISSION.CONTACTS)} />
-                <Button text='Request gallery' onPress={() => requestPermission(PERMISSION.GALLERY)} />
-                <Button text='Request location' onPress={() => requestPermission(PERMISSION.LOCATION)} />
-                <Button text='Request notifications' onPress={() => requestPermission(PERMISSION.NOTIFICATIONS)} />
+        <ScrollView contentContainerStyle={{ flex: 1 }}>
+            <View style={[styles.container, { backgroundColor: THEME_COLOR.background }]}>
+                <Label style={[styles.header, { color: THEME_COLOR.primary }]}>{t('welcome')}</Label>
+
+                <Formik
+                    initialValues={{ email: '', password: '', isKeepLoggedIn: false }}
+                    validationSchema={ILoginFormSchema}
+                    onSubmit={(values) => handleLogin(values)}
+                >
+                    {({
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        values,
+                        errors,
+                        touched,
+                        setFieldValue,
+                    }) => (
+                        <>
+                            <TextInput
+                                style={[
+                                    styles.input,
+                                    {
+                                        backgroundColor: THEME_COLOR.secondary,
+                                        color: THEME_COLOR.text,
+                                    },
+                                ]}
+                                placeholder="Email"
+                                placeholderTextColor={THEME_COLOR.text}
+                                onChangeText={handleChange('email')}
+                                onBlur={handleBlur('email')}
+                                value={values.email}
+                            />
+                            {touched.email && errors.email && (
+                                <Label style={styles.errorText}>{errors.email}</Label>
+                            )}
+
+                            <TextInput
+                                style={[
+                                    styles.input,
+                                    {
+                                        backgroundColor: THEME_COLOR.secondary,
+                                        color: THEME_COLOR.text,
+                                    },
+                                ]}
+                                placeholder="Password"
+                                placeholderTextColor={THEME_COLOR.text}
+                                onChangeText={handleChange('password')}
+                                onBlur={handleBlur('password')}
+                                value={values.password}
+                                secureTextEntry
+                            />
+                            {touched.password && errors.password && (
+                                <Label style={styles.errorText}>{errors.password}</Label>
+                            )}
+
+                            <TouchableOpacity
+                                style={styles.checkboxContainer}
+                                onPress={() => setFieldValue('isKeepLoggedIn', !values.isKeepLoggedIn)}
+                            >
+                                <View
+                                    style={[
+                                        styles.checkbox,
+                                        values.isKeepLoggedIn && { backgroundColor: THEME_COLOR.accent },
+                                    ]}
+                                />
+                                <Label style={[styles.checkboxLabel, { color: THEME_COLOR.text }]}>
+                                    Keep me logged in
+                                </Label>
+                            </TouchableOpacity>
+                            {touched.isKeepLoggedIn && errors.isKeepLoggedIn && (
+                                <Label style={styles.errorText}>{errors.isKeepLoggedIn}</Label>
+                            )}
+
+                            <TouchableOpacity
+                                style={[styles.loginButton, { backgroundColor: THEME_COLOR.accent }]}
+                                onPress={() => handleSubmit()}
+                            >
+                                <Label style={styles.buttonText}>Login</Label>
+                            </TouchableOpacity>
+                        </>
+                    )}
+                </Formik>
             </View>
-
-
-            <TouchableOpacity
-                style={[styles.loginButton, { backgroundColor: THEME_COLOR.accent }]}
-                onPress={handleLogin}
-            >
-                <Label style={styles.buttonText}>Login</Label>
-
-            </TouchableOpacity>
-
-        </View>
-    );
-};
+        </ScrollView>
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -90,7 +145,26 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-});
-
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+        marginBottom: 10,
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    checkbox: {
+        width: 20,
+        height: 20,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        marginRight: 10,
+    },
+    checkboxLabel: {
+        fontSize: 14,
+    },
+})
 
 export default LoginScreen

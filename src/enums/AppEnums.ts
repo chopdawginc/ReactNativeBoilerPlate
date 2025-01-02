@@ -36,6 +36,7 @@ export enum KEYS {
 export enum SCREEN {
     LOGIN = 'LoginScreen',
     SIGNUP = 'SignupScreen',
+    HOME = 'HomeScreen',
     EDIT_PROFILE = 'EditProfile',
 }
 
