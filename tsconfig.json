@@ -18,6 +18,7 @@
       "@src": ["./src/*"],
       "@assets": ["./src/assets/"],
       "@common": ["src/common"],
+      "@enums": ["./src/enums/"],
       "@contexts": ["./src/contexts/"],
       "@database": ["src/DatabaseServices"],
       "@utils": ["src/utils"],

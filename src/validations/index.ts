@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import {validationMessages} from '@constant';
+import { validationMessages } from '@constant';
 
 export const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -38,6 +38,10 @@ export const IAddUserFormSchema = yup.object().shape({
     .matches(PHONE_NUMBER_REGEX, 'Phone number is not valid')
     .max(17, 'Phone number must be at most 15 digits long'),
   role: yup.string().required(validationMessages.required),
+  password: yup.string().required(validationMessages.password.required).matches(
+    PASSWORD_REGEX,
+    validationMessages.password.strong
+  ),
 });
 
 export const IAddMessageFormSchema = yup.object({
