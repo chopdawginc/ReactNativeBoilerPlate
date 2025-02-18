@@ -1,5 +1,6 @@
 export enum FIREBASE_COLLECTION {
   USERS = 'users',
+  PRODUCTS = 'products',
 }
 
 export enum STORAGE {
@@ -26,6 +27,10 @@ export enum QUERY {
   NOT_IN = 'not-in',
 }
 
+export enum FIRESTORE_FILTER {
+  CREATED_AT = 'createdAt'
+}
+
 export enum KEYS {
   THEME = '@theme',
   LANGUAGE = 'language',
@@ -42,4 +47,10 @@ export enum PERMISSION {
 export enum THEME {
   LIGHT = 'light',
   DARK = 'dark',
+}
+
+export enum MEDIA_TYPE {
+  PHOTO = 'photo',
+  VIDEO = 'video',
+  ANY = 'any',
 }

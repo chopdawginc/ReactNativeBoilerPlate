@@ -1,1 +1,1 @@
-export * from './RootNavigation'
+export { default as RootNavigation } from './RootNavigation'

@@ -5,10 +5,10 @@ import React, {
   useCallback,
   useState,
 } from 'react';
-import {KEYS, THEME} from '@constant';
-import {useAsyncStorage} from '@hooks';
-import {LIGHT_MODE, DARK_MODE} from '@styles/theme';
-import {ThemeContextProps, ProviderProps} from '@types';
+import { KEYS, THEME } from '@constant';
+import { useAsyncStorage } from '@shared/hooks';
+import { LIGHT_MODE, DARK_MODE } from '@styles/theme';
+import { ThemeContextProps, ProviderProps } from '@types';
 
 export const ThemeContext = createContext<ThemeContextProps | undefined>(
   undefined,
@@ -22,9 +22,9 @@ export const useTheme = () => {
   return context;
 };
 
-export const ThemeProvider: React.FC<ProviderProps> = ({children}) => {
+export const ThemeProvider: React.FC<ProviderProps> = ({ children }) => {
   const [colors, setColors] = useState(LIGHT_MODE);
-  const {fetchAsync, saveAsync} = useAsyncStorage();
+  const { fetchAsync, saveAsync } = useAsyncStorage();
   const [currentTheme, setCurrentMode] = useState(THEME.LIGHT);
 
   const getSavedTheme = useCallback(async () => {

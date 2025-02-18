@@ -1,4 +1,9 @@
 {
-    "welcome": "Bienvenue dans mon application!",
-    "hello": "Bonjour, Moeed!"
+    "welcome": "Bienvenue sur mon application !",
+    "hello": "Bonjour, Moeed !",
+    "editProfile": "Modifier le profil",
+    "namePlaceholder": "Entrez votre nom",
+    "save": "Enregistrer",
+    "loading": "Chargement...",
+    "welcomeHeading": "Bienvenue, "
 }
