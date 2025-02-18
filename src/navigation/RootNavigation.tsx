@@ -1,22 +1,23 @@
 import React from 'react'
-import * as ui from '@modules'
 import { SCREEN } from '@constant'
 import { NavigationContainer } from '@react-navigation/native'
+import { ProfileContainer, EditProfileContainer, LoginContainer } from '@features'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 const Stack = createNativeStackNavigator()
 
 const screenOptionStyle = { headerShown: false }
 
-export const RootNavigation = () => {
+const RootNavigation = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={screenOptionStyle}>
-                <Stack.Screen name={SCREEN.HOME} component={ui.HomeScreen} />
-                <Stack.Screen name={SCREEN.SIGNUP} component={ui.SignupScreen} />
-                <Stack.Screen name={SCREEN.LOGIN} component={ui.LoginScreen} />
-                <Stack.Screen name={SCREEN.EDIT_PROFILE} component={ui.EditProfile} />
+                <Stack.Screen name={SCREEN.LOGIN} component={LoginContainer} />
+                <Stack.Screen name={SCREEN.PROFILE} component={ProfileContainer} />
+                <Stack.Screen name={SCREEN.EDIT_PROFILE} component={EditProfileContainer} />
             </Stack.Navigator>
         </NavigationContainer>
     )
 }
+
+export default RootNavigation

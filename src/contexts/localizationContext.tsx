@@ -1,8 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import i18n from 'i18next'
 import { KEYS } from '@constant'
-import { en, fr } from '../languages'
-import { useAsyncStorage } from '@hooks'
+import { en, fr } from '@languages'
+import { useAsyncStorage } from '@shared/hooks'
 import { LocalizationContextType, ProviderProps } from '@types'
 import { initReactI18next, useTranslation } from 'react-i18next'
 
@@ -50,9 +50,6 @@ export const LocalizationProvider: React.FC<ProviderProps> = ({ children }) => {
         }
     }, [])
 
-    // useEffect(() => {
-    //     setCurrentLanguage(i18n.language)
-    // }, [i18n.language])
 
     const changeLanguage = async (lng: string) => {
         i18n.changeLanguage(lng)

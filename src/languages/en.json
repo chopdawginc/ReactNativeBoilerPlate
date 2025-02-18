@@ -1,4 +1,9 @@
 {
     "welcome": "Welcome to my app!",
-    "hello": "Hello, Moeed!"
+    "hello": "Hello, Moeed!",
+    "editProfile": "Edit Profile",
+    "namePlaceholder": "Enter your name",
+    "save": "Save",
+    "loading": "Loading...",
+    "welcomeHeading": "Welcome, "
 }
