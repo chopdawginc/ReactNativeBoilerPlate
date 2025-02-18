@@ -24,7 +24,7 @@ This is a **feature-based, scalable React Native boilerplate** that follows best
   │   │   ├── ProfileScreen.styles.ts  # Styles for Profile Screen
   │   │   ├── EditProfileScreen.tsx  # Edit Profile Screen
   │   │   ├── EditProfileScreen.styles.ts  # Styles for Edit Profile Screen
-  │   │   ├── features.ts  # Exports feature modules
+  │   │   ├── index.ts  # Exports feature modules
   ├── languages/          # Localization files
   ├── navigation/         # Navigation setup
   │   ├── navigation.ts   # Main navigation configurations
