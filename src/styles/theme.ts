@@ -1,5 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {isIOS} from '@utils';
+import { Dimensions, StyleSheet } from 'react-native';
+import { isIOS } from '@shared/utils';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

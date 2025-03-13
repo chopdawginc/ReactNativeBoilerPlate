@@ -1,47 +1,37 @@
-// @index.ts
 
-// Importing necessary types from 'react-native' and other libraries
-import {TextStyle, ViewStyle} from 'react-native';
+
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import React from 'react';
-import {PermissionStatus} from 'react-native-permissions';
+import { SCREEN } from '@constant';
+import { PermissionStatus } from 'react-native-permissions';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-// Define a type for different permission types that the application might request
-export type PermissionType =
-  | 'camera'
-  | 'gallery'
-  | 'location'
-  | 'contacts'
-  | 'notifications';
+export type PermissionType = 'camera' | 'gallery' | 'location' | 'contacts' | 'notifications';
 
-// Interface representing the state of various permissions in the application
 export interface PermissionsState {
-  camera: PermissionStatus; // Status of camera permission
-  gallery: PermissionStatus; // Status of gallery permission
-  location: PermissionStatus; // Status of location permission
-  contacts: PermissionStatus; // Status of contacts permission
-  notifications: PermissionStatus; // Status of notifications permission
+  camera: PermissionStatus;
+  gallery: PermissionStatus;
+  location: PermissionStatus;
+  contacts: PermissionStatus;
+  notifications: PermissionStatus;
 }
 
-// Generic interface for handling asynchronous storage operations
 export interface AsyncStorageHook<T> {
-  fetchAsync: (key: string) => Promise<T | null>; // Function to fetch data asynchronously
-  saveAsync: (key: string, value: T) => Promise<void>; // Function to save data asynchronously
-  deleteAsync: (key: string) => Promise<void>; // Function to delete data asynchronously
+  fetchAsync: (key: string) => Promise<T | null>;
+  saveAsync: (key: string, value: T) => Promise<void>;
+  deleteAsync: (key: string) => Promise<void>;
 }
 
-// Interface for handling search operations
 export interface UseSearchHandlers {
-  search: string; // Current search query
-  handleSearch: (text: string) => void; // Function to update the search query
+  search: string;
+  handleSearch: (text: string) => void;
 }
 
-// Type representing a timestamp with seconds and optional nanoseconds
 export type Timestamp = {
-  seconds: number; // Number of seconds
-  nanoseconds?: number; // Optional number of nanoseconds
+  seconds: number;
+  nanoseconds?: number;
 };
 
-// Type for formatting date options, used in date formatting functions
 export type DateFormatOptions = {
   weekday?: 'long' | 'short' | 'narrow';
   era?: 'long' | 'short' | 'narrow';
@@ -54,30 +44,84 @@ export type DateFormatOptions = {
   timeZoneName?: 'long' | 'short';
 };
 
-// Interface for theme context properties, used in theming the application
 export interface ThemeContextProps {
-  currentTheme: string; // Current theme name
-  THEME_COLOR: any; // Theme color settings
-  toggleTheme: Function; // Function to toggle between themes
+  currentTheme: string;
+  THEME_COLOR: any;
+  toggleTheme: Function;
 }
 
-// Interface for localization context, used for internationalization
 export interface LocalizationContextType {
-  t: (key: string, options?: any) => string; // Function to translate keys into localized strings
-  changeLanguage: (lng: string) => void; // Function to change the current language
-  currentLanguage: string; // Current language code
+  t: (key: string, options?: any) => string;
+  changeLanguage: (lng: string) => void;
+  currentLanguage: string;
 }
 
-// Interface for provider props, typically used in context providers
 export interface ProviderProps {
-  children: React.ReactNode; // React nodes to be rendered as children
+  children: React.ReactNode;
 }
 
-// Interface for button properties, used in button components
 export interface ButtonProps {
-  text: string; // Text to be displayed on the button
-  style?: ViewStyle; // Optional style for the button
-  onPress?: Function; // Optional function to handle button press
-  isLoading?: Boolean; // Optional flag to indicate loading state
-  textStyle?: TextStyle; // Optional style for the button text
+  text: string;
+  style?: StyleProp<ViewStyle>;
+  onPress?: Function;
+  isLoading?: Boolean;
+  textStyle?: TextStyle;
+}
+
+export interface ProfileProps {
+  user: any
+}
+
+export interface HomeProps {
+  registerUser: () => void
+  loginUser: () => void
+  createProduct: () => void
+  updateProduct: () => void
+  deleteProduct: () => void
+  getProducts: () => void
+}
+
+export interface ProfileHeaderProps {
+  name: string
+}
+
+export interface ProfileScreenProps {
+  user: { name: string } | null
+}
+
+export interface EditProfileScreenProps {
+  user: { name: string } | null
+  onUpdateProfile: (newData: { name: string }) => void
+}
+
+export type RootStackParamList = {
+  [SCREEN.LOGIN]: undefined;
+  [SCREEN.PROFILE]: undefined;
+  [SCREEN.EDIT_PROFILE]: undefined;
+};
+
+export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+export interface LoginScreenProps {
+  onLogin: (email: string, password: string) => void
+  onGoogleLogin: () => void
+  error?: string | null
+  loading?: boolean
+}
+
+export interface LoginFormProps {
+  onLogin: (email: string, password: string) => void
+  onGoogleLogin: () => void
+  loading?: boolean
+}
+
+export interface ifProps {
+  condition: any
+  children: React.ReactNode
+  elseComp?: React.ReactNode
+}
+
+export interface LabelProps {
+  children: any
+  style?: StyleProp<TextStyle>
 }
