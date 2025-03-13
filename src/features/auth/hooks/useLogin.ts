@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { SCREEN } from '@constant'
 import { NavigationProp } from '@types'
-import AuthService from '../services/authService'
+import { AuthService } from '@services'
 import { useNavigation } from '@react-navigation/native'
 
 const useLogin = () => {

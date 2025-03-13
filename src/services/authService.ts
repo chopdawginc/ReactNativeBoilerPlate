@@ -1,11 +1,11 @@
 // authService.ts
 import { FIREBASE_COLLECTION } from '@constant'
-import { appleAuth } from '@invertase/react-native-apple-authentication'
-import Auth from '@react-native-firebase/auth'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import { BaseService } from '@services'
+import BaseService from './baseService'
 import { showFlash } from '@shared/utils'
-import { User } from '../../../collections/user'
+import { User } from '../collections/user'
+import Auth from '@react-native-firebase/auth'
+import { appleAuth } from '@invertase/react-native-apple-authentication'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 
 export default class AuthService extends BaseService<User> {
 
