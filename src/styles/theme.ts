@@ -4,119 +4,89 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { COLORS } from '../constant/colors';
+import { FONT, FONT_SIZE } from '../constant/fonts';
 
 const ACTIVE_OPACITY = 0.9;
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-const LIGHT_MODE = {
-  primary: '#4CAF50',
-  text: '#333',
-  background: '#FFF',
-  secondary: '#FFFF99',
-  accent: '#2196F3',
-};
-
-const DARK_MODE = {
-  primary: '#2196F3',
-  text: '#EEE',
-  background: '#23262F',
-  secondary: '#FF3800',
-  accent: '#E91E63',
-};
-
-enum COLORS {
-  white = '#FFFFFF',
-  primary = '#2196F3',
-  text = '#EEE',
-  background = '#23262F',
-  secondary = '#FF9800',
-  accent = '#E91E63',
-  black = '#000',
-}
+const LIGHT_MODE = COLORS.lightMode;
+const DARK_MODE = COLORS.darkMode;
 
 enum FLASH_POSITION {
   TOP = 'top',
   BOTTOM = 'bottom',
 }
 
-enum FONT {
-  regular = 'Manrope-Regular',
-  bold = 'Manrope-Bold',
-  extraBold = 'Manrope-ExtraBold',
-  semiBold = 'Manrope-SemiBold',
-  medium = 'Manrope-Medium',
-  light = 'Manrope-Light',
-}
-
 const TEXT_STYLE = StyleSheet.create({
   titleExtraBold: {
     fontFamily: FONT.extraBold,
-    fontSize: 21,
+    fontSize: FONT_SIZE.titleExtraBold,
   },
   titleBold: {
     fontFamily: FONT.bold,
-    fontSize: 21,
+    fontSize: FONT_SIZE.titleBold,
   },
   smallTitleBold: {
     fontFamily: FONT.bold,
-    fontSize: 20,
+    fontSize: FONT_SIZE.smallTitleBold,
   },
   smallTitleSemiBold: {
     fontFamily: FONT.semiBold,
-    fontSize: 20,
+    fontSize: FONT_SIZE.smallTitleSemiBold,
   },
   smallTitleMedium: {
     fontFamily: FONT.medium,
-    fontSize: 20,
+    fontSize: FONT_SIZE.smallTitleMedium,
   },
   bigText: {
     fontFamily: FONT.regular,
-    fontSize: 16,
+    fontSize: FONT_SIZE.bigText,
   },
   bigTextSemiBold: {
     fontFamily: FONT.semiBold,
-    fontSize: 16,
+    fontSize: FONT_SIZE.bigTextSemiBold,
   },
   bigTextMedium: {
     fontFamily: FONT.medium,
-    fontSize: 16,
+    fontSize: FONT_SIZE.bigTextMedium,
   },
   bigTextBold: {
     fontFamily: FONT.bold,
-    fontSize: 16,
+    fontSize: FONT_SIZE.bigTextBold,
   },
   text: {
     fontFamily: FONT.regular,
-    fontSize: 13,
+    fontSize: FONT_SIZE.text,
   },
   textSemiBold: {
     fontFamily: FONT.semiBold,
-    fontSize: 13,
+    fontSize: FONT_SIZE.textSemiBold,
   },
   textMedium: {
     fontFamily: FONT.medium,
-    fontSize: 13,
+    fontSize: FONT_SIZE.textMedium,
   },
   textBold: {
     fontFamily: FONT.bold,
-    fontSize: 13,
+    fontSize: FONT_SIZE.textBold,
   },
   smallText: {
     fontFamily: FONT.regular,
-    fontSize: 11,
+    fontSize: FONT_SIZE.smallText,
   },
   smallTextSemiBold: {
     fontFamily: FONT.semiBold,
-    fontSize: 11,
+    fontSize: FONT_SIZE.smallTextSemiBold,
   },
   smallTextMedium: {
     fontFamily: FONT.medium,
-    fontSize: 11,
+    fontSize: FONT_SIZE.smallTextMedium,
   },
   smallTextBold: {
     fontFamily: FONT.bold,
-    fontSize: 11,
+    fontSize: FONT_SIZE.smallTextBold,
   },
 });
 

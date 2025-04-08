@@ -1,12 +1,12 @@
 export const COLORS = {
   primary: {
-    main: '#6653D3',
+    main: '#6B8E23',
     hard: '#133A64',
     light: '#9080eb',
     lightest: '#B6ABE9',
   },
   secondary: {
-    main: '#F4F6F7',
+    main: '#3E2723',
     light: '#E6E9EB',
   },
   success: {
@@ -41,5 +41,28 @@ export const COLORS = {
   },
   gradient: {
     main: 'linear-gradient(0deg, #EAF4F7, #EAF4F7)',
+  },
+  lightMode: {
+    primary: '#4CAF50',
+    text: '#333',
+    background: '#FFF',
+    secondary: '#FFFF99',
+    accent: '#2196F3',
+  },
+  darkMode: {
+    primary: '#004D40',
+    text: '#FFFFFF',
+    background: '#1C1C1C',
+    secondary: '#D2B48C',
+    accent: '#ADD8E6',
+  },
+  accent: {
+    main: '#FFD700',
+  },
+  text: {
+    main: '#FFFFFF',
+  },
+  background: {
+    main: '#3E2723',
   },
 };
