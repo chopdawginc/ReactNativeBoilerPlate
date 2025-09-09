@@ -80,7 +80,7 @@ This is a React Native + TypeScript app. The main entry point is
 - **Navigation**: Keep navigation changes centralized in [src/navigation](mdc:src/navigation) `src/navigation`; define route names in [src/constant/routes.ts](mdc:src/constant/routes.ts) `src/constant/routes.ts`.
 - **Data access**: Place API/Firebase logic in [src/services](mdc:src/services) `src/services`; avoid calling services directly from presentational components.
 - **Contexts**: Use providers from [src/contexts](mdc:src/contexts) `src/contexts` (theme, localization) at the app root for cross-cutting concerns.
-- **Date/Time**: Use **dayjs** for all date/time operations. Centralize helpers in [src/shared/utils/date.ts](mdc:src/shared/utils/date.ts) `src/shared/date.ts`.
+- **Date/Time**: Use **dayjs** for all date/time operations. Centralize helpers in [src/shared/utils/date.ts](mdc:src/shared/utils/date.ts).
 - **Performance**: Memoize heavy components with `React.memo`; use `useCallback`/`useMemo` for expensive computations or unstable props passed to children.
 - **Types**: Put shared type declarations in [src/types](mdc:src/types) `src/types/`. Co-locate tiny, file-local types only when truly private. Re-export via [src/types/index.ts](mdc:src/types/index.ts) `src/types/index.ts`.
 - **Components**: Prefer existing shared components from [src/shared/components](mdc:src/shared/components) `src/shared/components` before creating new ones. If a new pattern repeats twice, promote it to shared.
