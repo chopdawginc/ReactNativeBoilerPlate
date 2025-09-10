@@ -38,6 +38,20 @@ This is a React Native + TypeScript app. The main entry point is
 - **RN assets config**: [react-native.config.js](mdc:react-native.config.js)
 - **Jest config**: [jest.config.js](mdc:jest.config.js)
 
+## Shared Components Structure
+Put reusable UI, in the [src/shared/components](mdc:src/shared/components) directory as:
+
+- `<Thing>.tsx`
+- (Optional) `<Thing>.styles.ts`
+
+When working with styles, make sure to pass `THEME_COLORS` to the styles file:
+
+```tsx
+const { THEME_COLOR } = useTheme();
+const Styles = styles(THEME_COLOR);
+```
+
+
 ## Feature Module Structure
 
 - **Location**: Each feature lives under `src/features/<featureName>/`.
@@ -54,8 +68,12 @@ This is a React Native + TypeScript app. The main entry point is
   - **Role**: Render UI; no direct data fetching. Receive all data/handlers via props from the Container.
   - **Styles**: Keep styles in the same folder as `<Name>Screen.styles.ts`.
 
-- **Components (feature-local)**: Put reusable, feature-specific UI in `components/` as `<Thing>.tsx` (with optional `<Thing>.styles.ts`).
+- **Components (feature-local)**: Put reusable, feature-specific UI in `components/` as `<Thing>.tsx` (with optional    `<Thing>.styles.ts`). When working with styles, make sure to pass `THEME_COLORS` to the styles file:
 
+    ```tsx
+    const { THEME_COLOR } = useTheme();
+    const Styles = styles(THEME_COLOR);
+    ```
   - **Reuse rule**: If a component is used by multiple features, promote it to `src/shared/components/` and update imports.
 
 - **Hooks (feature-local)**: Put feature logic hooks in `hooks/` as `use<Name>.ts`.

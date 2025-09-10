@@ -1,0 +1,53 @@
+---
+description: Forms, inputs, and validation standards (Formik + Zod or React Hook Form + Yup)
+alwaysApply: true
+---
+
+## Forms & Inputs
+
+  ### Allowed stacks (pick one per form)
+    - **Decision rule (check `package.json` first):**
+      - If `"react-hook-form"` **and** `"yup"` are present → use **React Hook Form + Yup**.
+      - Else if `"formik"` is present → use **Formik + Zod**.
+      - If neither is present, default to **React Hook Form + Yup**.
+    - **Do not** mix libraries or validators within the same form.
+
+
+### Schema location & naming
+- Place shared/global schemas in [src/shared/utils/validations.ts](mdc:src/shared/utils/validations.ts)  
+- Name for intent: `LoginFormSchema`, `ChangePasswordFormSchema`, etc.
+- Export types inferred from the schema (`yup.InferType` or `z.infer`) for component typing.
+
+### Inputs (reuse before building)
+- Prefer shared inputs under `src/shared/components/`.  
+  If none fits, add `TextField` at `src/shared/components/TextField/` and export via  
+  [src/shared/components/index.ts](mdc:src/shared/components/index.ts).
+- Inputs must:
+  - Accept `name`, `label?`, `placeholder?`, and common RN text props.
+  - Render inline error text from the form state.
+
+### Wiring patterns
+- **RHF + Yup**
+  - Use `FormProvider` with `yupResolver(schema)`.
+  - Default `mode: 'onChange'`.
+- **Formik + Zod**
+  - Provide a `validate` adapter that calls `schema.safeParse(values)` and maps issues to Formik errors.
+  - Use Formik context or `<Field>` internally; keep adapters minimal.
+
+### Validation guidance
+- Reuse constants from [src/constant/validationMessage.ts](mdc:src/constant/validationMessage.ts).
+- Reuse shared regex like `PASSWORD_REGEX`, `PHONE_NUMBER_REGEX` from  
+  [src/shared/utils/validations.ts](mdc:src/shared/utils/validations.ts).
+- Cross-field rules:
+  - Confirm password: use a schema-level refinement (Zod) or `oneOf` (Yup).
+  - Booleans remain booleans; refine for “at least one selected” cases.
+
+### UX details
+- Set `keyboardType`, `autoCapitalize`, `secureTextEntry`, `textContentType` appropriately.
+- Trigger submit from keyboard on the last field.
+- Show inline field errors; reserve global alerts for submit failures.
+- Disable submit until `formState.isValid && formState.isDirty` (RHF) or equivalent in Formik.
+
+### Consistency
+- Both stacks are supported. **Do not** mix them in a single form.
+- All form screens must use one of the approved stacks; try not to use plain state.
