@@ -1,11 +1,6 @@
 import React from 'react';
-import { SCREEN } from '@constant';
 import { NavigationContainer } from '@react-navigation/native';
-import {
-  ProfileContainer,
-  EditProfileContainer,
-  LoginContainer,
-} from '@features';
+import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
@@ -16,11 +11,11 @@ const RootNavigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={screenOptionStyle}>
-        <Stack.Screen name={SCREEN.LOGIN} component={LoginContainer} />
-        <Stack.Screen name={SCREEN.PROFILE} component={ProfileContainer} />
         <Stack.Screen
-          name={SCREEN.EDIT_PROFILE}
-          component={EditProfileContainer}
+          name={'Login'}
+          component={() => (
+            <Text style={{ color: 'black', fontSize: 60 }}>Login</Text>
+          )}
         />
       </Stack.Navigator>
     </NavigationContainer>

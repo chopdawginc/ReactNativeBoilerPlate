@@ -1,19 +1,40 @@
 {
+  "extends": "@react-native/typescript-config",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods"],
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "noImplicitAny": false,
-    "lib": ["es2017", "DOM"],
-    "allowJs": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "jsx": "react-native",
     "noEmit": true,
     "isolatedModules": true,
+    "customConditions": ["react-native"],
+
+    // Strictness
     "strict": true,
+    // Consider keeping this true; it’s enabled by `strict`, but you explicitly disabled it before.
+    // "noImplicitAny": true,
+
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "moduleResolution": "node",
-    "baseUrl": "./",
-    "typeRoots": ["node_modules/@types", "./src/**"],
+
+    // RN doesn’t have the DOM; avoid pulling in DOM types.
+    "lib": ["ES2017"],
+
+    // Interop
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    "baseUrl": ".",
+    // `typeRoots` should be directories, not globs; usually you don’t need to set this at all.
+    // If you have custom d.ts files, put them in `src/types` and uncomment the next line.
+    // "typeRoots": ["./src/types", "./node_modules/@types"],
+
+    // Helpful for RN projects
+    "skipLibCheck": true,
     "paths": {
       "@src": ["./src/*"],
       "@assets": ["./src/assets/"],
@@ -25,18 +46,7 @@
       "@constant": ["src/constant/"],
       "@features": ["src/features/"],
       "@shared/*": ["src/shared/*"],
-      "@languages":["src/languages/"],
-    },
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true
-  },
-  "include": ["./**/*", "*.tsx", "*.json", "*.tff", "typings/**/*.d.ts"],
-  "exclude": [
-    "node_modules",
-    "babel.config.js",
-    "metro.config.js",
-    "jest.config.js",
-    "dist"
-  ]
+      "@languages": ["src/languages/"]
+    }
+  }
 }

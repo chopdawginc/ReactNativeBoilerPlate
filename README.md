@@ -1,118 +1,97 @@
-# 📘 React Native Boilerplate
+This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-This is a **feature-based, scalable React Native boilerplate** that follows best practices for **clean architecture, modularity, and maintainability**.
+# Getting Started
 
----
+> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
 
-## 🚀 Project Structure
+## Step 1: Start Metro
 
-```
-/src
-  ├── assets/             # Images, fonts, icons
-  ├── collections/        # Data collections (if applicable)
-  ├── constant/           # Global constants (e.g., API endpoints, colors)
-  ├── contexts/           # Global context providers (if needed)
-  ├── features/           # Feature-based modules
-  │   ├── profile/        # Example feature (Profile)
-  │   │   ├── components/  # UI-only components
-  │   │   ├── containers/  # Handles logic (fetching, state management)
-  │   │   ├── hooks/       # Feature-specific hooks
-  │   │   ├── services/    # Feature-specific API services
-  │   │   ├── ProfileScreen.tsx  # Profile Screen
-  │   │   ├── ProfileScreen.styles.ts  # Styles for Profile Screen
-  │   │   ├── EditProfileScreen.tsx  # Edit Profile Screen
-  │   │   ├── EditProfileScreen.styles.ts  # Styles for Edit Profile Screen
-  │   │   ├── index.ts  # Exports feature modules
-  ├── languages/          # Localization files
-  ├── navigation/         # Navigation setup
-  │   ├── navigation.ts   # Main navigation configurations
-  │   ├── RootNavigation.tsx  # Handles global navigation
-  ├── services/           # Global API services (Auth, Firebase, Base API)
-  │   ├── authService.ts  # Handles authentication
-  │   ├── baseService.ts  # Base API service
-  │   ├── firebaseService.ts  # Firebase configurations
-  │   ├── userService.ts  # User-related API calls
-  ├── shared/             # Reusable UI components and hooks
-  │   ├── components/     # Common UI components used across the app
-  │   ├── hooks/          # Shared hooks for state management and utilities
-  │   ├── utils/          # Utility functions
-  ├── styles/             # Global styles (theme, fonts, etc.)
-  ├── types/              # TypeScript types/interfaces
+First, you will need to run **Metro**, the JavaScript build tool for React Native.
+
+To start the Metro dev server, run the following command from the root of your React Native project:
+
+```sh
+# Using npm
+npm start
+
+# OR using Yarn
+yarn start
 ```
 
----
+## Step 2: Build and run your app
 
-## 📦 Setup & Installation
+With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
 
-### 1️⃣ Clone the Repository
+### Android
 
-```bash
-git clone https://github.com/chopdawginc/ReactNativeBoilerPlate.git
-cd react-native-boilerplate
+```sh
+# Using npm
+npm run android
+
+# OR using Yarn
+yarn android
 ```
 
-### 2️⃣ Install Dependencies
+### iOS
 
-```bash
-yarn install  # or npm install
+For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+
+The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+
+```sh
+bundle install
 ```
 
-### 3️⃣ Run the App
+Then, and every time you update your native dependencies, run:
 
-```bash
-yarn android  # For Android
-yarn ios      # For iOS
+```sh
+bundle exec pod install
 ```
 
-*(Make sure you have React Native CLI, Xcode (for iOS), and Android SDK set up.)*
+For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
 
----
+```sh
+# Using npm
+npm run ios
 
-## 🔗 Conventions & Best Practices
-
-- ✅ **Component Naming:** `PascalCase` (e.g., `ProfileHeader.tsx`)
-- ✅ **File Naming:** `ComponentName.styles.ts` for styles, `ServiceName.ts` for services
-- ✅ **Imports:** Use aliases (`@features`, `@services`) to avoid relative paths
-- ✅ **Separation of Concerns:** Containers for logic, UI components for display
-- ✅ **State Management:** Use React Context, Redux, or Zustand as needed
-
----
-
-## 📚 Common Commands
-
-```bash
-yarn start      # Start Metro Bundler
-yarn android    # Run on Android
-yarn ios        # Run on iOS
-yarn lint       # Linting
-yarn test       # Run tests
-yarn build      # Build the app
+# OR using Yarn
+yarn ios
 ```
 
----
+If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
 
-## 🎯 Next Steps
+This is one way to run your app — you can also build it directly from Android Studio or Xcode.
 
-- 🔹 Implement authentication logic using `authService.ts`
-- 🔹 Set up Redux/Context or Zustand for global state management (if needed)
-- 🔹 Integrate API calls in different features
-- 🔹 Add localization (`/languages` folder)
+## Step 3: Modify your app
 
----
+Now that you have successfully run the app, let's make changes!
 
-## 🙌 Contributing
+Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
 
-1️⃣ **Fork the repo & clone locally**
-2️⃣ **Create a new branch** (`feature/my-feature`)
-3️⃣ **Commit changes** (`git commit -m "Added new feature"`)
-4️⃣ **Push to GitHub & open a Pull Request**
+When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
 
----
+- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
+- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
-## 🛠 Need Help?
+## Congratulations! :tada:
 
-If you face any issues, feel free to open an issue or contact the maintainers.
+You've successfully run and modified your React Native App. :partying_face:
 
----
+### Now what?
 
-🚀 **Happy Coding!**
+- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
+- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+
+# Troubleshooting
+
+If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+
+# Learn More
+
+To learn more about React Native, take a look at the following resources:
+
+- [React Native Website](https://reactnative.dev) - learn more about React Native.
+- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
+- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
+- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
+- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
