@@ -3884,6 +3884,11 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController (~> 2.7.4)
+  - RNNotifee (9.1.8):
+    - React-Core
+    - RNNotifee/NotifeeCore (= 9.1.8)
+  - RNNotifee/NotifeeCore (9.1.8):
+    - React-Core
   - RNPermissions (4.1.5):
     - boost
     - DoubleConversion
@@ -4065,6 +4070,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - SocketRocket (~> 0.7.1)
@@ -4271,6 +4277,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-google-signin/google-signin"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNNotifee:
+    :path: "../node_modules/@notifee/react-native"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNScreens:
@@ -4389,6 +4397,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 9339994ea5d1ff6ad2679b7d0cc3d49053111369
   RNGoogleSignin: 3ebeb9a5438ca74f218b15c5ce3d23b71d403e0e
   RNImageCropPicker: 8e39c01f205e00d739c31e682f068aac315587bf
+  RNNotifee: 4a6ee5c7deaf00e005050052d73ee6315dff7ec9
   RNPermissions: faf7ae0ea37f10379184b6b7be09de4663e9510f
   RNScreens: 871305075ddf1291411b051d86da9e0d9289de02
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d

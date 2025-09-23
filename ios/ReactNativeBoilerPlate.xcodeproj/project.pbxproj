@@ -7,25 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01E238D681C14B05AD74CF46 /* Manrope-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26F0B2DB5F944DF88D5D2AFD /* Manrope-ExtraBold.ttf */; };
 		0AA8A7C7C9952B3D488726A0 /* Pods_ReactNativeBoilerPlate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D47ECFFF9CBB131F729810 /* Pods_ReactNativeBoilerPlate.framework */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		3BE0B38493EB4BADB082D794 /* Manrope-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 233871CD512A45C4AC681EE9 /* Manrope-Regular.ttf */; };
 		6C58498F2E813B00002C8BB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6C58498E2E813B00002C8BB2 /* GoogleService-Info.plist */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
+		7937352FE2B344EB90E7AA0B /* Manrope-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17C492D8E4674C6F9E3006A8 /* Manrope-Medium.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		91DDA97FF93B436B9703303C /* Manrope-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 14F8A5731D8E453BA6ACB189 /* Manrope-SemiBold.ttf */; };
+		A63CC3F6E64446EBB376495D /* Manrope-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00BE4A6E88E64285A505F51E /* Manrope-Light.ttf */; };
 		D33E3C240471856946807687 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		D6EBF236FE5E4A7EAFC3CB04 /* Manrope-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84D55A011834485B84AC58E4 /* Manrope-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		00BE4A6E88E64285A505F51E /* Manrope-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Manrope-Light.ttf"; path = "../src/assets/fonts/Manrope-Light.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* ReactNativeBoilerPlate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReactNativeBoilerPlate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ReactNativeBoilerPlate/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ReactNativeBoilerPlate/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = ReactNativeBoilerPlate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		14F8A5731D8E453BA6ACB189 /* Manrope-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Manrope-SemiBold.ttf"; path = "../src/assets/fonts/Manrope-SemiBold.ttf"; sourceTree = "<group>"; };
+		17C492D8E4674C6F9E3006A8 /* Manrope-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Manrope-Medium.ttf"; path = "../src/assets/fonts/Manrope-Medium.ttf"; sourceTree = "<group>"; };
+		233871CD512A45C4AC681EE9 /* Manrope-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Manrope-Regular.ttf"; path = "../src/assets/fonts/Manrope-Regular.ttf"; sourceTree = "<group>"; };
+		26F0B2DB5F944DF88D5D2AFD /* Manrope-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Manrope-ExtraBold.ttf"; path = "../src/assets/fonts/Manrope-ExtraBold.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-ReactNativeBoilerPlate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeBoilerPlate.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeBoilerPlate/Pods-ReactNativeBoilerPlate.debug.xcconfig"; sourceTree = "<group>"; };
 		47D47ECFFF9CBB131F729810 /* Pods_ReactNativeBoilerPlate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReactNativeBoilerPlate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5709B34CF0A7D63546082F79 /* Pods-ReactNativeBoilerPlate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeBoilerPlate.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeBoilerPlate/Pods-ReactNativeBoilerPlate.release.xcconfig"; sourceTree = "<group>"; };
 		6C58498E2E813B00002C8BB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ReactNativeBoilerPlate/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ReactNativeBoilerPlate/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		84D55A011834485B84AC58E4 /* Manrope-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Manrope-Bold.ttf"; path = "../src/assets/fonts/Manrope-Bold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -78,6 +90,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				870C403FF9A14A299768B0D1 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -90,6 +103,20 @@
 				13B07F961A680F5B00A75B9A /* ReactNativeBoilerPlate.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		870C403FF9A14A299768B0D1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				84D55A011834485B84AC58E4 /* Manrope-Bold.ttf */,
+				26F0B2DB5F944DF88D5D2AFD /* Manrope-ExtraBold.ttf */,
+				00BE4A6E88E64285A505F51E /* Manrope-Light.ttf */,
+				17C492D8E4674C6F9E3006A8 /* Manrope-Medium.ttf */,
+				233871CD512A45C4AC681EE9 /* Manrope-Regular.ttf */,
+				14F8A5731D8E453BA6ACB189 /* Manrope-SemiBold.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -166,6 +193,12 @@
 				6C58498F2E813B00002C8BB2 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				D33E3C240471856946807687 /* PrivacyInfo.xcprivacy in Resources */,
+				D6EBF236FE5E4A7EAFC3CB04 /* Manrope-Bold.ttf in Resources */,
+				01E238D681C14B05AD74CF46 /* Manrope-ExtraBold.ttf in Resources */,
+				A63CC3F6E64446EBB376495D /* Manrope-Light.ttf in Resources */,
+				7937352FE2B344EB90E7AA0B /* Manrope-Medium.ttf in Resources */,
+				3BE0B38493EB4BADB082D794 /* Manrope-Regular.ttf in Resources */,
+				91DDA97FF93B436B9703303C /* Manrope-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
