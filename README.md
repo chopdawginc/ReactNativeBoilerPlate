@@ -64,7 +64,7 @@ yarn android  # For Android
 yarn ios      # For iOS
 ```
 
-*(Make sure you have React Native CLI, Xcode (for iOS), and Android SDK set up.)*
+_(Make sure you have React Native CLI, Xcode (for iOS), and Android SDK set up.)_
 
 ---
 

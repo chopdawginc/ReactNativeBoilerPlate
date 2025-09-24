@@ -1,16 +1,12 @@
 import React from 'react';
-import { SCREEN } from '@constant';
-import { NavigationContainer } from '@react-navigation/native';
-import {
-  ProfileContainer,
-  EditProfileContainer,
-  LoginContainer,
-} from '@features';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {SCREEN} from '@constant';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {ProfileContainer, EditProfileContainer, LoginContainer} from '@features';
 
 const Stack = createNativeStackNavigator();
 
-const screenOptionStyle = { headerShown: false };
+const screenOptionStyle = {headerShown: false};
 
 const RootNavigation = () => {
   return (
@@ -18,10 +14,7 @@ const RootNavigation = () => {
       <Stack.Navigator screenOptions={screenOptionStyle}>
         <Stack.Screen name={SCREEN.LOGIN} component={LoginContainer} />
         <Stack.Screen name={SCREEN.PROFILE} component={ProfileContainer} />
-        <Stack.Screen
-          name={SCREEN.EDIT_PROFILE}
-          component={EditProfileContainer}
-        />
+        <Stack.Screen name={SCREEN.EDIT_PROFILE} component={EditProfileContainer} />
       </Stack.Navigator>
     </NavigationContainer>
   );

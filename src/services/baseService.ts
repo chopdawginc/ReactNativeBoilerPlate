@@ -1,50 +1,63 @@
-import firestore from '@react-native-firebase/firestore'
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
-import { FIRESTORE_FILTER, QUERY } from '@constant'
+import {
+  getFirestore,
+  collection as fsCollection,
+  doc as fsDoc,
+  getDoc as fsGetDoc,
+  setDoc as fsSetDoc,
+  deleteDoc as fsDeleteDoc,
+  getDocs as fsGetDocs,
+  orderBy as fsOrderBy,
+  where as fsWhere,
+  query as fsQuery,
+} from '@react-native-firebase/firestore';
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {FIRESTORE_FILTER, QUERY} from '@constant';
 
 export default class BaseService<T> {
-  protected collection
+  protected collectionRef;
 
   constructor(collectionName: string) {
-    this.collection = firestore().collection(collectionName)
+    this.collectionRef = fsCollection(getFirestore(), collectionName);
   }
 
   async create(data: T): Promise<void> {
-    const docRef = this.collection.doc()
+    const docRef = fsDoc(this.collectionRef);
     const formattedData = {
       ...data,
       createdAt: new Date(),
       documentId: docRef.id,
-    }
-    return await docRef.set(formattedData)
+    };
+    return await fsSetDoc(docRef, formattedData);
   }
 
   async read(id: string): Promise<T | null> {
-    const docRef = this.collection.doc(id)
-    const doc = await docRef.get()
-    if (!doc.exists) {
-      return null
+    const docRef = fsDoc(this.collectionRef, id);
+    const doc = await fsGetDoc(docRef);
+    if (!doc.exists()) {
+      return null;
     }
-    return doc.data() as T
+    return doc.data() as T;
   }
 
   async update(id: string, data: Partial<T>): Promise<void> {
-    const docRef = this.collection.doc(id)
-    await docRef.set(data, { merge: true })
+    const docRef = fsDoc(this.collectionRef, id);
+    await fsSetDoc(docRef, data as any, {merge: true});
   }
 
   async delete(id: string): Promise<void> {
-    const docRef = this.collection.doc(id)
-    await docRef.delete()
+    const docRef = fsDoc(this.collectionRef, id);
+    await fsDeleteDoc(docRef);
   }
 
   async list(): Promise<T[]> {
-    const snapshot = await this.collection.orderBy(FIRESTORE_FILTER.CREATED_AT, 'desc').get()
-    return snapshot.docs.map(doc => doc.data() as T)
+    const q = fsQuery(this.collectionRef, fsOrderBy(FIRESTORE_FILTER.CREATED_AT, 'desc'));
+    const snapshot = await fsGetDocs(q);
+    return snapshot.docs.map((doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => doc.data() as T);
   }
 
-  async where(key: string, value: any, query: FirebaseFirestoreTypes.WhereFilterOp = QUERY.EQUAL): Promise<T[]> {
-    const snapshot = await this.collection.where(key, query, value).get()
-    return snapshot.docs.map(doc => doc.data() as T)
+  async where(key: string, value: any, queryOp: FirebaseFirestoreTypes.WhereFilterOp = QUERY.EQUAL): Promise<T[]> {
+    const q = fsQuery(this.collectionRef, fsWhere(key, queryOp, value));
+    const snapshot = await fsGetDocs(q);
+    return snapshot.docs.map((doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => doc.data() as T);
   }
 }
