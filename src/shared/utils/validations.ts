@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import { z } from 'zod';
 import { validationMessages } from '@constant';
 
 export const PASSWORD_REGEX =
@@ -6,81 +6,60 @@ export const PASSWORD_REGEX =
 
 export const PHONE_NUMBER_REGEX = /^\+[1-9]\d{1,14}$/;
 
-export const ILoginFormSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email(validationMessages.email.invalid)
-    .required(validationMessages.email.required),
-  // password: yup.string().required(validationMessages.password.required).matches(
-  //     PASSWORD_REGEX,
-  //     validationMessages.password.strong
-  // ),
-  isKeepLoggedIn: yup.boolean().required(),
+export const ILoginFormSchema = z.object({
+  email: z
+    .email({ message: validationMessages.email.invalid })
+    .min(1, validationMessages.email.required),
+  password: z.string().min(1, validationMessages.password.required),
+  isKeepLoggedIn: z.boolean().optional(),
 });
 
-export const IForgetPasswordFormSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email(validationMessages.email.invalid)
-    .required(validationMessages.email.required),
+export const IForgetPasswordFormSchema = z.object({
+  email: z
+    .email({ message: validationMessages.email.invalid })
+    .min(1, validationMessages.email.required),
 });
 
-export const IAddUserFormSchema = yup.object().shape({
-  firstName: yup.string().required(validationMessages.required),
-  lastName: yup.string().required(validationMessages.required),
-  email: yup
+export const IAddUserFormSchema = z.object({
+  firstName: z.string().min(1, validationMessages.required),
+  lastName: z.string().min(1, validationMessages.required),
+  email: z
+    .email({ message: validationMessages.email.invalid })
+    .min(1, validationMessages.email.required),
+  phone: z
     .string()
-    .email(validationMessages.email.invalid)
-    .required(validationMessages.email.required),
-  phone: yup
-    .string()
-    .required(validationMessages.required)
-    .matches(PHONE_NUMBER_REGEX, 'Phone number is not valid')
+    .min(1, validationMessages.required)
+    .regex(PHONE_NUMBER_REGEX, 'Phone number is not valid')
     .max(17, 'Phone number must be at most 15 digits long'),
-  role: yup.string().required(validationMessages.required),
-  password: yup.string().required(validationMessages.password.required).matches(
-    PASSWORD_REGEX,
-    validationMessages.password.strong
-  ),
+  role: z.string().min(1, validationMessages.required),
+  password: z
+    .string()
+    .min(1, validationMessages.password.required)
+    .regex(PASSWORD_REGEX, validationMessages.password.strong),
 });
 
-export const IAddMessageFormSchema = yup.object({
-  // date: yup.mixed().required(),
-  date: yup.date().required('Date is required'),
-  message: yup.string().required(),
-  audience: yup
-    .object()
-    .shape({
-      sitter: yup.boolean().required(),
-      parent: yup.boolean().required(),
-      allUsers: yup.boolean().required(),
-    })
-    .test('atLeastOneTrue', 'You must select at least one audience', obj =>
-      Object.values(obj).some(Boolean),
-    ),
-  medium: yup
-    .object()
-    .shape({
-      text: yup.boolean().required(),
-      inApp: yup.boolean().required(),
-      email: yup.boolean().required(),
-    })
-    .test('atLeastOneTrue', 'You must select at least one medium', obj =>
-      Object.values(obj).some(Boolean),
-    ),
-});
-
-export const IChangePasswordFormSchema = yup.object({
-  password: yup.string().required(),
-  newPassword: yup
-    .string()
-    .required(validationMessages.password.required)
-    .matches(PASSWORD_REGEX, validationMessages.password.strong),
-  confirmPassword: yup
-    .string()
-    .required(validationMessages.confirmPassword.required)
-    .oneOf(
-      [yup.ref('newPassword')],
-      validationMessages.confirmPassword.notMatch,
-    ),
-});
+export const IChangePasswordFormSchema = z
+  .object({
+    password: z.string().min(1),
+    newPassword: z
+      .string()
+      .min(1, validationMessages.password.required)
+      .regex(PASSWORD_REGEX, validationMessages.password.strong),
+    confirmPassword: z
+      .string()
+      .min(1, validationMessages.confirmPassword.required),
+  })
+  .superRefine(
+    (
+      data: { password: string; newPassword: string; confirmPassword: string },
+      ctx: z.RefinementCtx,
+    ) => {
+      if (data.newPassword !== data.confirmPassword) {
+        ctx.addIssue({
+          code: 'custom',
+          message: validationMessages.confirmPassword.notMatch,
+          path: ['confirmPassword'],
+        });
+      }
+    },
+  );

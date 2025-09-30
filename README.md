@@ -2,8 +2,6 @@
 
 This is a **feature-based, scalable React Native boilerplate** that follows best practices for **clean architecture, modularity, and maintainability**.
 
-### **Developed by Hameed Khan & Moeed Farooq**
-
 ---
 
 ## 🚀 Project Structure

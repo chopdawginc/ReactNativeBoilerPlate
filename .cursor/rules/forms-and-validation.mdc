@@ -1,0 +1,331 @@
+---
+description: Forms, inputs, and validation standards (Formik + Zod only)
+alwaysApply: true
+---
+
+## Forms & Inputs
+
+  ### Allowed stack
+    - Use **Formik + Zod** for all forms.
+    - Ensure `"formik"` and `"zod"` exist in `package.json`. If missing, add them.
+    - **Do not** mix other form libraries or validators within the same form.
+
+
+### Schema location & naming
+- Place shared/global schemas in [src/shared/utils/validations.ts](mdc:src/shared/utils/validations.ts)  
+- Feature-specific schemas live next to their screen/container (e.g., `features/auth/...`).
+- Name for intent: `LoginFormSchema`, `ChangePasswordFormSchema`, etc.
+- Export types inferred from the schema (`z.infer<typeof Schema>`) for component typing.
+
+### Inputs (reuse before building)
+- Prefer shared inputs under `src/shared/components/`.  
+  If none fits, add `TextField` at `src/shared/components/TextField/` and export via  
+  [src/shared/components/index.ts](mdc:src/shared/components/index.ts).
+- Inputs must:
+  - Accept `name`, `label?`, `placeholder?`, and common RN text props.
+  - Read errors from Formik and render inline error text.
+  - Work with disabled/readOnly states and show required indicators as needed.
+
+### Wiring pattern (Formik Provider + Context)
+- Build a Formik instance with `useFormik` and wrap the subtree in `<FormikProvider value={formik}>`.
+- Consume form state via `useFormikContext()` or `useField(name)` inside field components.
+- Defaults:
+  - `validateOnChange: true`, `validateOnBlur: true`, `validateOnMount: true`.
+  - `enableReinitialize: false` (turn on only if initial values can change from server data).
+  - Put side effects in `onSubmit`, not in `validate`.
+- Create a single `zodFormikValidate(schema)` adapter that returns a Formik-compatible `validate(values)`.
+
+```ts
+// Adapter: map Zod issues to Formik { [path]: message }
+import { ZodSchema } from 'zod'
+
+export function zodFormikValidate<T>(schema: ZodSchema<T>) {
+  return (values: T) => {
+    const result = schema.safeParse(values)
+    if (result.success) return {}
+    const errors: Record<string, string> = {}
+    for (const issue of result.error.issues) {
+      const path = issue.path.join('.') || 'form'
+      if (!errors[path]) errors[path] = issue.message
+    }
+    return errors
+  }
+}
+```
+
+#### Minimal example (Provider + Context + Zod)
+```tsx
+import React from 'react'
+import { View, TextInput, Text, Button } from 'react-native'
+import { useFormik, FormikProvider, useField } from 'formik'
+import { z } from 'zod'
+import { zodFormikValidate } from './zodFormikValidate'
+
+const LoginSchema = z.object({
+  email: z.string().trim().email('Invalid email'),
+  password: z.string().min(8, 'At least 8 characters')
+})
+
+function TextField({ name, placeholder, secureTextEntry }: { name: string; placeholder?: string; secureTextEntry?: boolean }) {
+  const [field, meta, helpers] = useField<string>(name)
+  return (
+    <View>
+      <TextInput
+        value={field.value}
+        onChangeText={helpers.setValue}
+        onBlur={() => helpers.setTouched(true)}
+        placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
+        autoCapitalize="none"
+      />
+      {!!meta.touched && !!meta.error && <Text>{meta.error}</Text>}
+    </View>
+  )
+}
+
+export function LoginForm() {
+  const formik = useFormik({
+    initialValues: { email: '', password: '' },
+    validate: zodFormikValidate(LoginSchema),
+    validateOnMount: true,
+    onSubmit: async (values) => {}
+  })
+
+  return (
+    <FormikProvider value={formik}>
+      <View>
+        <TextField name="email" placeholder="Email" />
+        <TextField name="password" placeholder="Password" secureTextEntry />
+        <Button title="Sign in" onPress={formik.handleSubmit as any} disabled={!formik.isValid || !formik.dirty || formik.isSubmitting} />
+      </View>
+    </FormikProvider>
+  )
+}
+```
+
+### Validation guidance (Zod)
+- Reuse messages from [src/constant/validationMessage.ts](mdc:src/constant/validationMessage.ts).
+- Reuse shared regex like `PASSWORD_REGEX`, `PHONE_NUMBER_REGEX` from  
+  [src/shared/utils/validations.ts](mdc:src/shared/utils/validations.ts).
+
+- Standard fields:
+  - **email**: `z.string().trim().email(msg)`
+  - **password**: `z.string().min(8, msg).regex(PASSWORD_REGEX, msg)`
+  - **phone**: `z.string().regex(PHONE_NUMBER_REGEX, msg)`
+  - **number/range**: `z.number().min(a).max(b)` or `z.coerce.number()` for text inputs
+  - **enum/options**: `z.enum([...])` or `z.string().min(1, msg)`
+  - **arrays**: `z.array(ItemSchema).min(1, msg)`; use Formik `FieldArray` for UI
+
+- Cross-field rules (schema-level):
+  - Confirm password: refine that `password === confirmPassword` with `superRefine`
+  - At least one selected: refine over an array or boolean tuple
+  - Start/end relationship: `start < end` (see date examples below)
+
+- Dates & time:
+  - Normalize for comparison: compare only dates when needed: 
+    `const today = new Date(); today.setHours(0,0,0,0)`.
+  - Be explicit about timezone if server uses UTC. Prefer comparing ISO strings or normalized `Date` objects.
+
+  - Disallow past dates (e.g., booking/appointment):
+    ```ts
+    const today = new Date(); today.setHours(0,0,0,0)
+    const AppointmentSchema = z.object({
+      date: z.date({ required_error: msg.REQUIRED })
+        .refine(d => { const x = new Date(d); x.setHours(0,0,0,0); return x >= today }, msg.DATE_CANNOT_BE_PAST)
+    })
+    ```
+
+  - Disallow future dates (e.g., birthdate):
+    ```ts
+    const today = new Date(); today.setHours(0,0,0,0)
+    const ProfileSchema = z.object({
+      birthDate: z.date({ required_error: msg.REQUIRED })
+        .refine(d => { const x = new Date(d); x.setHours(0,0,0,0); return x <= today }, msg.DATE_CANNOT_BE_FUTURE)
+    })
+    ```
+
+  - Minimum age (13/18):
+    ```ts
+    function yearsAgo(n: number) { const d = new Date(); d.setFullYear(d.getFullYear() - n); return d }
+    const RegistrationSchema = z.object({
+      birthDate: z.date().refine(d => d <= yearsAgo(13), msg.MIN_AGE_13)
+    })
+    ```
+
+  - Date window (within next N days):
+    ```ts
+    function daysFromNow(n: number) { const d = new Date(); d.setDate(d.getDate() + n); return d }
+    const RequestSchema = z.object({
+      neededBy: z.date()
+        .refine(d => d >= new Date(), msg.DATE_CANNOT_BE_PAST)
+        .refine(d => d <= daysFromNow(30), msg.DATE_TOO_FAR)
+    })
+    ```
+
+  - Range relationship (start <= end):
+    ```ts
+    const RangeSchema = z.object({ start: z.date(), end: z.date() })
+      .superRefine(({ start, end }, ctx) => {
+        if (start > end) ctx.addIssue({ code: 'custom', path: ['end'], message: msg.END_AFTER_START })
+      })
+    ```
+
+  - Inclusive vs exclusive: document whether comparisons are `<` or `<=` and keep consistent with UI copy.
+  - String dates: if values are ISO strings, use `z.coerce.date()` or preprocess to `Date`.
+  
+  - Weekday/weekend rules:
+    ```ts
+    function isWeekend(d: Date) { const x = new Date(d); const n = x.getDay(); return n === 0 || n === 6 }
+    const WeekendOnlySchema = z.object({
+      date: z.date().refine(isWeekend, msg.WEEKENDS_ONLY)
+    })
+    ```
+  - Blackout dates (holidays):
+    ```ts
+    const blackoutISO = new Set(['2025-12-25','2025-01-01'])
+    function isBlackout(d: Date) { return blackoutISO.has(d.toISOString().slice(0,10)) }
+    const BookingSchema = z.object({
+      date: z.date().refine(d => !isBlackout(d), msg.BLACKOUT_DATE)
+    })
+    ```
+  - Optional fields: for optional date, use `z.date().optional()` and refine only if defined.
+  - UI constraints for pickers: set `minDate`/`maxDate` props consistent with validation rules to prevent impossible choices.
+
+
+#### Phone numbers (library-based preferred)
+- Prefer a phone library for correctness and formatting (e.g., `libphonenumber-js` or `react-native-phone-number-input`).
+- Keep a single source of truth in the form state: store the canonical E.164 value (e.g., `+14155552671`).
+- If the UI needs country selection, store `phoneCountry` (ISO alpha-2) alongside and validate consistency.
+- Fallback to `PHONE_NUMBER_REGEX` only if you cannot use a library.
+
+- E.164-only input with library validation:
+```ts
+import { z } from 'zod'
+import { isValidPhoneNumber } from 'libphonenumber-js'
+
+const PhoneSchema = z.object({
+  phone: z.string().trim()
+    .refine(v => v.startsWith('+'), 'Use full international format, e.g., +14155552671')
+    .refine(v => isValidPhoneNumber(v), 'Invalid phone number')
+})
+```
+
+- Country + national input (validate with default country, normalize to E.164 on submit):
+```ts
+import { parsePhoneNumber } from 'libphonenumber-js'
+
+const PhoneByCountrySchema = z.object({
+  phoneCountry: z.string().length(2, 'Select country'),
+  phoneNational: z.string().trim().min(4, 'Enter phone')
+}).superRefine(({ phoneCountry, phoneNational }, ctx) => {
+  try {
+    const parsed = parsePhoneNumber(phoneNational, phoneCountry as any)
+    if (!parsed?.isValid()) throw new Error('invalid')
+  } catch {
+    ctx.addIssue({ code: 'custom', path: ['phoneNational'], message: 'Invalid phone number' })
+  }
+})
+
+// On submit, normalize:
+const e164 = parsePhoneNumber(values.phoneNational, values.phoneCountry)!.number
+```
+
+- `react-native-phone-number-input`: comprehensive integration
+
+  - Recommended form state
+    - `phone` (E.164 string, e.g., `+14155552671`)
+    - `phoneCountry` (ISO alpha-2, e.g., `US`) to drive `defaultCode` and persist user choice
+  - Schema (Zod) — validate using `libphonenumber-js` and require E.164
+  
+
+  - Field wrapper component (Formik + Context)
+    ```tsx
+    import React, { useRef, useMemo } from 'react'
+    import PhoneInput, { Country } from 'react-native-phone-number-input'
+    import { View, Text } from 'react-native'
+    import { useFormikContext, useField } from 'formik'
+
+    type Props = {
+      name?: string
+      nameCountry?: string
+      defaultCode?: Country['code']
+      label?: string
+    }
+
+    export function PhoneInputField({ name = 'phone', nameCountry = 'phoneCountry', defaultCode = 'US', label }: Props) {
+      const ref = useRef<PhoneInput>(null)
+      const { setFieldValue, setFieldTouched, values } = useFormikContext<any>()
+      const [field, meta] = useField<string>(name)
+      const [, countryMeta] = useField<string>(nameCountry)
+      const code = (values?.[nameCountry] as string) || defaultCode
+
+      const handleFormattedChange = (formatted: string) => {
+        setFieldValue(name, formatted?.trim() ?? '')
+      }
+
+      const handleCountryChange = (country: Country) => {
+        setFieldValue(nameCountry, country?.cca2)
+      }
+
+      return (
+        <View>
+          {!!label && <Text>{label}</Text>}
+          <PhoneInput
+            ref={ref}
+            defaultCode={code as any}
+            value={field.value}
+            layout="first"
+            onChangeFormattedText={handleFormattedChange}
+            onChangeCountry={handleCountryChange}
+            withDarkTheme={false}
+            textInputProps={{
+              onBlur: () => setFieldTouched(name, true),
+              keyboardType: 'phone-pad',
+              textContentType: 'telephoneNumber',
+              autoComplete: 'tel',
+            }}
+          />
+          {!!meta.touched && !!meta.error && <Text>{meta.error}</Text>}
+          {!!countryMeta.touched && !!countryMeta.error && <Text>{countryMeta.error}</Text>}
+        </View>
+      )
+    }
+    ```
+  - Usage inside a Formik form
+    ```tsx
+    import { useFormik, FormikProvider } from 'formik'
+    import { z } from 'zod'
+    import { zodFormikValidate } from './zodFormikValidate'
+    import { PhoneInputField } from './PhoneInputField'
+    import { PhoneInputSchema } from './schemas'
+
+    export function Example() {
+      const formik = useFormik({
+        initialValues: { phone: '', phoneCountry: 'US' },
+        validate: zodFormikValidate(PhoneInputSchema),
+        validateOnMount: true,
+        onSubmit: async (values) => {}
+      })
+      return (
+        <FormikProvider value={formik}>
+          <PhoneInputField label="Phone" />
+        </FormikProvider>
+      )
+    }
+    ```
+
+### Normalization (email & name)
+- Normalize right before persisting to the database (submit/service layer).
+- Helpers: Use the capitalizeFirstLetter function from `shared/utils/stringUtils` to normalize names, and use
+ `email.toLowerCase()` for emails.
+ 
+### UX details
+- Set `keyboardType`, `autoCapitalize`, `secureTextEntry`, `textContentType` appropriately.
+- Trigger submit from keyboard on the last field.
+- Show inline field errors; reserve global alerts for submit failures.
+- Disable submit until `formik.isValid && formik.dirty`. Prefer `validateOnMount: true` so initial validity is known.
+- While submitting: show loading on primary button and prevent duplicate submits.
+
+### Consistency
+- Only **Formik + Zod** are supported. **Do not** mix with other form libs.
+- All form screens must follow this pattern; avoid plain component state for input validation.

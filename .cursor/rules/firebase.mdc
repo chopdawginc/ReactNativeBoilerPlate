@@ -1,0 +1,54 @@
+---
+description: Firebase configuration and usage
+---
+
+## Firebase
+
+- Mobile configs:
+
+  - iOS: [ios/GoogleService-Info.plist](mdc:ios/GoogleService-Info.plist)
+  - Android: [android/app/google-services.json](mdc:android/app/google-services.json)
+
+- App integration:
+
+  - Initialization and helpers in [src/services/firebaseService.ts](mdc:src/services/firebaseService.ts)
+  - Service wrappers: [src/services/authService.ts](mdc:src/services/authService.ts), [src/services/userService.ts](mdc:src/services/userService.ts), [src/services/profileService.ts](mdc:src/services/profileService.ts)
+
+- When adding new Firebase features:
+
+  1. Add native SDKs via Pods/Gradle if needed.
+  2. Extend `firebaseService` with typed helpers.
+  3. Create feature-specific service methods in `src/services`.
+
+- Rules:
+
+  - Writes:
+    - Use write batches for multi-document writes to ensure atomicity across multiple documents.
+    - Use transactions when multiple users may update the same document concurrently to prevent race conditions.
+
+  - Listeners:
+    - Always clean up `onSnapshot` listeners (unsubscribe on unmount/cleanup) to avoid memory leaks and duplicate listeners.
+
+  - Cloud Functions:
+    - Enforce the use of Cloud Functions v2 only.
+
+  - Data modeling:
+    - Store dates as Firestore `Timestamp` values (not JS `Date` or strings).
+    - Store references to other documents as `DocumentReference`, not plain strings.
+    - Use lowercase collection names; do not use camelCase for collection names.
+    - Use camelCase for all document field names.
+
+  - Pagination:
+    - Store the last page's snapshot on the client to resume pagination without refetching from the beginning.
+    - Fetch the most recent entries first when paginating.
+    - Keep the query shape the same across pages (same filters, same `orderBy` chain, same `limit`).
+    - Prefer server-side filtering during pagination; avoid client-side filtering.
+    - Do not paginate over huge `in` or `array-contains-any` sets.
+
+## Data Fetching
+- **Standard**: Use **TanStack React Query** for all server/cache data management.
+- **Keys & placement**: Centralize query keys in [src/constant/queryKeys.ts](mdc:src/constant/queryKeys.ts) `src/constant/queryKeys.ts`.
+- Use `.count()` for collection/filtered counts; never fetch full documents just to count.
+- Always paginate when more documents are available; prefer a hook from `shared/hooks` if one exists; otherwise, use React Query with pagination.
+
+
