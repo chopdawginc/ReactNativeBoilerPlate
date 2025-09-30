@@ -1,139 +1,183 @@
 // authService.ts
-import { FIREBASE_COLLECTION } from '@constant'
-import BaseService from './baseService'
-import { showFlash } from '@shared/utils'
-import { User } from '../collections/user'
-import Auth from '@react-native-firebase/auth'
-import { appleAuth } from '@invertase/react-native-apple-authentication'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import {FIREBASE_COLLECTION} from '@constant';
+import BaseService from './baseService';
+import {showFlash} from '@shared/utils';
+import {User} from '../collections/user';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  sendPasswordResetEmail,
+  sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithCredential,
+  AppleAuthProvider,
+} from '@react-native-firebase/auth';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {Timestamp} from '@react-native-firebase/firestore';
+
+GoogleSignin.configure({
+  webClientId: '123.apps.googleusercontent.com',
+});
 
 export default class AuthService extends BaseService<User> {
-
   constructor() {
-    super(FIREBASE_COLLECTION.USERS)
+    super(FIREBASE_COLLECTION.USERS);
   }
 
   // Register with email and password
   async register(data: any): Promise<User | null> {
-    const { email, password } = data;
+    const {email, password} = data;
     try {
-      const userCredentials = await Auth().createUserWithEmailAndPassword(email, password)
-      const userId = userCredentials.user.uid
+      const authInstance = getAuth();
+      const userCredentials = await createUserWithEmailAndPassword(authInstance, email, password);
+      const userId = userCredentials.user.uid;
 
       let formattedData = {
         ...data,
         createdAt: new Date(),
         uid: userId,
-      }
-      delete formattedData.password
+      };
+      delete formattedData.password;
 
-      await this.update(userId, formattedData)
+      await this.update(userId, formattedData);
 
-      return formattedData
+      return formattedData;
     } catch (e) {
-      console.log(e)
-      return null
+      console.log(e);
+      return null;
     }
   }
 
   // Login with email and password
   async login(email: string, password: string): Promise<User | null> {
-    const authUser = await Auth().signInWithEmailAndPassword(email, password)
-    const savedUser = await this.read(authUser.user.uid)
-    return savedUser
+    const authUser = await signInWithEmailAndPassword(getAuth(), email, password);
+    const savedUser = await this.read(authUser.user.uid);
+    return savedUser;
   }
 
   // Logout
   async logout(): Promise<void> {
-    return await Auth().signOut()
+    return await signOut(getAuth());
   }
 
   // Send password reset email
   async resetPassword(email: string): Promise<void> {
-    return await Auth().sendPasswordResetEmail(email)
+    return await sendPasswordResetEmail(getAuth(), email);
   }
 
   // Send email verification
-  // async sendEmailVerification(): Promise<void> {
-  //   if (Auth().currentUser) {
-  //     return await sendEmailVerification(this.auth.currentUser);
-  //   }
-  //   throw new Error("No user is currently signed in");
-  // }
+  async sendEmailVerification(): Promise<void> {
+    if (getAuth().currentUser) {
+      return await sendEmailVerification(getAuth().currentUser as any);
+    }
+    throw new Error('No user is currently signed in');
+  }
 
   // Social login with Google
-  async loginWithGoogle(): Promise<User | null> {
+  async loginWithGoogle(): Promise<{user: User | null; eventType: 'signup' | 'signin'}> {
     try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true })
-      const { user, idToken } = await GoogleSignin.signIn()
-      const users = await this.where('email', user.email)
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+      const signInResult = await GoogleSignin.signIn();
 
-      if (users.length !== 0) {
-        const googleCredential = Auth.GoogleAuthProvider.credential(idToken)
-        const { user: firebaseUser } = await Auth().signInWithCredential(googleCredential)
-        const user = await this.read(firebaseUser?.uid)
-        return user
+      if (signInResult.idToken && signInResult.user) {
+        const users = await this.where('email', signInResult.user.email);
+
+        if (users.length !== 0) {
+          // User exists - sign in
+          const googleCredential = GoogleAuthProvider.credential(signInResult.idToken);
+          const {user: firebaseUser} = await signInWithCredential(getAuth(), googleCredential);
+          const user = await this.read(firebaseUser?.uid);
+
+          return {user, eventType: 'signin' as const};
+        } else {
+          // User doesn't exist - register new user
+          const googleCredential = GoogleAuthProvider.credential(signInResult.idToken);
+          const {user: firebaseUser} = await signInWithCredential(getAuth(), googleCredential);
+
+          // Create user data
+          const userData: Partial<User> = {
+            email: signInResult.user.email,
+            firstName: signInResult.user.givenName || '',
+            lastName: signInResult.user.familyName || '',
+            createdAt: Timestamp.now(),
+            id: firebaseUser.uid,
+          };
+
+          await this.update(firebaseUser.uid, userData);
+          const newUser = await this.read(firebaseUser.uid);
+          return {user: newUser, eventType: 'signup' as const};
+        }
       }
-      return null
-    } catch (error) {
-      console.error('Google login failed', error)
-      throw error
+      return {user: null, eventType: 'signin' as const};
+    } catch (error: any) {
+      console.error('Google login failed', error);
+      throw error;
     }
   }
 
-
   // Social login with Apple
-  async loginWithApple(): Promise<User | null> {
+  async loginWithApple(): Promise<{user: User | null; eventType: 'signup' | 'signin'}> {
     try {
-
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      })
+      });
 
       if (!appleAuthRequestResponse.identityToken) {
-        throw new Error('Apple Sign-In failed - no identity token returned')
+        return {user: null, eventType: 'signin' as const};
       }
 
-      // @ts-expect-error
-      const { email }: any = jwt_decode(appleAuthRequestResponse.identityToken)
-      const users = await this.where('email', email)
+      const {identityToken, nonce, fullName} = appleAuthRequestResponse;
 
+      // Try to read email from the Apple ID token (often only present on first sign-in)
+      let emailFromToken: string | null = null;
+      try {
+        // @ts-expect-error
+        const decoded: any = jwt_decode(identityToken);
+        emailFromToken = decoded?.email ?? null;
+      } catch {
+        // ignore decode failures; we'll fall back below
+      }
+
+      // If we have an email, check if the user already exists
+      let users: User[] = [];
+      if (emailFromToken) {
+        users = await this.where('email', emailFromToken);
+      }
+
+      // Create Firebase credential and sign in
+      const appleCredential = AppleAuthProvider.credential(identityToken, nonce);
+      const {user: firebaseUser} = await signInWithCredential(getAuth(), appleCredential);
+
+      // If user exists by email OR already has a user doc by UID -> signin
       if (users.length !== 0) {
-        const { identityToken, nonce } = appleAuthRequestResponse
-        const appleCredential = Auth.AppleAuthProvider.credential(identityToken, nonce)
-        const { user: firebaseUser } = await Auth().signInWithCredential(appleCredential)
-
-        const userInfo =  await this.read(firebaseUser?.uid)
-        return userInfo
-      } else {
-        showFlash('No user exists in our records.')
-        return null
-
+        const user = await this.read(firebaseUser?.uid);
+        return {user, eventType: 'signin' as const};
       }
 
-    } catch (error) {
-      console.error('Google login failed', error)
-      throw error
+      const existingByUid = await this.read(firebaseUser?.uid);
+      if (existingByUid) {
+        return {user: existingByUid, eventType: 'signin' as const};
+      }
+
+      // Otherwise, create a new user (signup)
+      const userData: Partial<User> = {
+        email: emailFromToken || firebaseUser?.email || '',
+        firstName: fullName?.givenName || '',
+        lastName: fullName?.familyName || '',
+        createdAt: Timestamp.now(),
+        id: firebaseUser.uid,
+      };
+
+      await this.update(firebaseUser.uid, userData);
+      const newUser = await this.read(firebaseUser.uid);
+      return {user: newUser, eventType: 'signup' as const};
+    } catch (error: any) {
+      console.error('Apple login failed', error);
+      throw error;
     }
   }
-
-    // Social login with Facebook
-  // async loginWithFacebook(): Promise<UserCredential> {
-  //   const provider = new FacebookAuthProvider();
-  //   return await signInWithPopup(this.auth, provider);
-  // }
-
-  // Phone number authentication
-  // async phoneNumberAuth(phoneNumber: string, appVerifier: RecaptchaVerifier): Promise<UserCredential> {
-  //   const provider = new PhoneAuthProvider(this.auth);
-  //   const verificationId = await provider.verifyPhoneNumber(phoneNumber, appVerifier);
-  //   const verificationCode = window.prompt('Please enter the verification code that was sent to your mobile device.');
-  //   if (verificationCode) {
-  //     const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
-  //     return await signInWithPhoneNumber(this.auth, phoneNumber, appVerifier);
-  //   }
-  //   throw new Error("Verification code is required");
-  // }
-
 }
