@@ -4,6 +4,23 @@ This is a **feature-based, scalable React Native boilerplate** that follows best
 
 ---
 
+## Development Environment
+
+- Android Studio Ladybug | 2024.2.1 Patch 3
+- Xcode 16.3
+- OpenJDK 17.0.14 (LTS)
+- Node v22.4.1
+
+## Firebase Configuration
+
+This project uses Firebase services.  
+You **must replace** the current Firebase configuration files with your own project-specific files:
+
+- **Android**: Replace `android/app/google-services.json` with the `google-services.json` file from your Firebase project.
+- **iOS**: Replace `ios/GoogleService-Info.plist` with the `GoogleService-Info.plist` file from your Firebase project.
+
+⚠️ Without these files, Firebase features such as authentication, notifications, or analytics will not work.
+
 ## 🚀 Project Structure
 
 ```
@@ -116,3 +133,8 @@ If you face any issues, feel free to open an issue or contact the maintainers.
 ---
 
 🚀 **Happy Coding!**
+
+Android Studio Ladybug | 2024.2.1 Patch 3
+Xcode 16.3
+openjdk version "17.0.14" 2025-01-21 LTS
+Node v22.4.1

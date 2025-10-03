@@ -279,3 +279,35 @@ export const uploadFileToFirebaseStorage = (
     }
   });
 };
+
+export const transformData = async (
+  item: any,
+  referenceFields: string[],
+  setRelatedListener: (id: string, ref: FirebaseFirestoreTypes.DocumentReference) => void,
+) => {
+  let transformedItem = {...item};
+
+  for (const field of referenceFields) {
+    const ref = item[field];
+    if (ref) {
+      try {
+        const docSnapshot = await ref.get();
+        if (!docSnapshot.exists()) {
+          throw new Error(`${field} document not found!`);
+        }
+        const relatedData = docSnapshot.data();
+
+        setRelatedListener(ref.id, ref);
+
+        transformedItem = {
+          ...transformedItem,
+          [`${field}Data`]: relatedData,
+        };
+      } catch (error) {
+        console.error(`Error fetching ${field} data:`, error);
+      }
+    }
+  }
+
+  return transformedItem;
+};
