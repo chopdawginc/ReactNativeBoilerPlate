@@ -1,0 +1,109 @@
+---
+alwaysApply: true
+---
+
+## Project Structure Guide
+This is a React Native + TypeScript app. The main entry point is
+[index.js](mdc:index.js), which renders [App.tsx](mdc:App.tsx).
+
+### App code
+- **Source root**: [src/](mdc:src)
+  - **Navigation**: [src/navigation/index.ts](mdc:src/navigation/index.ts), [src/navigation/RootNavigation.tsx](mdc:src/navigation/RootNavigation.tsx)
+  - **Features**: [src/features/](mdc:src/features) holds screen modules (e.g., auth, profile)
+  - **Services**: [src/services/](mdc:src/services) for API/Firebase logic
+  - **Contexts**: [src/contexts/](mdc:src/contexts) for theme/localization providers
+  - **Shared**: [src/shared/](mdc:src/shared) for reusable components, hooks, utils
+  - **Constants**: [src/constant/](mdc:src/constant) app enums, routes, colors
+  - **Types**: [src/types/index.ts](mdc:src/types/index.ts)
+  - **Styles/Theme**: [src/styles/theme.ts](mdc:src/styles/theme.ts)
+  - **Assets**: [src/assets/](mdc:src/assets) for images and fonts
+
+### Native projects
+- **iOS**: [ios/](mdc:ios)
+  - CocoaPods: [ios/Podfile](mdc:ios/Podfile)
+  - App target: [ios/ReactNativeBoilerPlate](mdc:ios/ReactNativeBoilerPlate)
+  - Firebase config: [ios/GoogleService-Info.plist](mdc:ios/GoogleService-Info.plist)
+- **Android**: [android/](mdc:android)
+  - App module: [android/app/build.gradle](mdc:android/app/build.gradle)
+  - Firebase config: [android/app/google-services.json](mdc:android/app/google-services.json)
+
+### Tooling
+- **Package scripts**: [package.json](mdc:package.json)
+- **TypeScript config**: [tsconfig.json](mdc:tsconfig.json)
+- **Metro bundler**: [metro.config.js](mdc:metro.config.js)
+- **RN assets config**: [react-native.config.js](mdc:react-native.config.js)
+- **Jest config**: [jest.config.js](mdc:jest.config.js)
+
+## Shared Components Structure
+Put reusable UI, in the [src/shared/components](mdc:src/shared/components) directory as:
+
+- `<Thing>.tsx`
+- (Optional) `<Thing>.styles.ts`
+
+When working with styles, make sure to pass `THEME_COLORS` to the styles file:
+
+```tsx
+const { THEME_COLOR } = useTheme();
+const Styles = styles(THEME_COLOR);
+```
+
+
+## Feature Module Structure
+- **Location**: Each feature lives under `src/features/<featureName>/`.
+
+- **Subfolders**: Use `components/`, `containers/`, `screens/`, and `hooks/` inside each feature. Add `types/` only if the types are feature-specific.
+
+- **Containers**: Put smart components in `containers/` as `<Name>Container.tsx`.
+
+  - **Role**: Wire data (React Query), app state, and navigation. Compose a Screen + pass props. Minimal layout/markup.
+  - **May import**: feature `hooks/`, `components/`, and the feature Screen. **Must not** import from other features.
+
+- **Screens**: Put presentational screens in `screens/` as `<Name>Screen.tsx`.
+
+  - **Role**: Render UI; no direct data fetching. Receive all data/handlers via props from the Container.
+  - **Styles**: Keep styles in the same folder as `<Name>Screen.styles.ts`.
+
+- **Components (feature-local)**: Put reusable, feature-specific UI in `components/` as `<Thing>.tsx` (with optional    `<Thing>.styles.ts`). When working with styles, make sure to pass `THEME_COLORS` to the styles file:
+
+    ```tsx
+    const { THEME_COLOR } = useTheme();
+    const Styles = styles(THEME_COLOR);
+    ```
+  - **Reuse rule**: If a component is used by multiple features, promote it to `src/shared/components/` and update imports.
+
+- **Hooks (feature-local)**: Put feature logic hooks in `hooks/` as `use<Name>.ts`.
+
+  - **Data**: Use **React Query** for async/server state. Keep feature-only hooks here; move shared hooks to `src/shared/hooks/`.
+
+- **Types**: Feature-specific types go in `types/` (e.g., `AuthUser.ts`). App-wide types stay in `src/types/`.
+- **Naming**: Use `PascalCase` for components/screens/containers; `camelCase` for variables; suffix styles with `.styles.ts`.
+
+  - Examples: `LoginContainer.tsx`, `LoginScreen.tsx`, `LoginScreen.styles.ts`, `useLogin.ts`, `PasswordField.tsx`.
+
+- **Import boundaries**:
+
+  - **Container →** can import Screen, feature Components/Hooks.
+  - **Screen →** can import feature Components only (no Containers).
+  - **Cross-feature →** never import directly; move shared code to `src/shared/`.
+
+- **Navigation**: Register screens in app navigation (`src/navigation/*`). Keep route names in `src/constant/routes.ts`.
+
+## Conventions
+- **Navigation**: Keep navigation changes centralized in [src/navigation](mdc:src/navigation) `src/navigation`; define route names in [src/constant/routes.ts](mdc:src/constant/routes.ts) `src/constant/routes.ts`.
+- **Data access**: Place API/Firebase logic in [src/services](mdc:src/services) `src/services`; avoid calling services directly from presentational components.
+- **Contexts**: Use providers from [src/contexts](mdc:src/contexts) `src/contexts` (theme, localization) at the app root for cross-cutting concerns.
+- **Date/Time**: Use **dayjs** for all date/time operations. Centralize helpers in [src/shared/utils/date.ts](mdc:src/shared/utils/date.ts).
+- **Performance**: Memoize heavy components with `React.memo`; use `useCallback`/`useMemo` for expensive computations or unstable props passed to children.
+- **Types**: Put shared type declarations in [src/types](mdc:src/types) `src/types/`. Co-locate tiny, file-local types only when truly private. Re-export via [src/types/index.ts](mdc:src/types/index.ts) `src/types/index.ts`.
+- **Components**: Prefer existing shared components from [src/shared/components](mdc:src/shared/components) `src/shared/components` before creating new ones. If a new pattern repeats twice, promote it to shared.
+- **Styling**: Follow the app’s theme tokens (colors, fonts, sizes, spacing) via [src/styles/theme.ts](mdc:src/styles/theme.ts) `src/styles/theme.ts`.
+- **Documentation**: Add clear JSDoc to functions, hooks, and components (params/returns/side effects). Include a brief “why” at the top of complex files.
+- **Naming**: Use descriptive names. Components: `PascalCase`; files match the default export (e.g., `UserCard.tsx`); variables: `camelCase`; folders are feature/domain-oriented.
+- **Imports**: Use path aliases defined in [tsconfig.json](mdc:tsconfig.json) (e.g., `@features/...`, `@shared/...`). Avoid deep relative paths like `../../..`.
+- **i18n**: Do not hardcode user-facing copy. Add keys in [src/languages/*.json](mdc:src/languages) and use the localization context/hooks to call `t('key')`.
+- **Accessibility & testIDs**: Provide `accessibilityLabel` and `testID` for interactive elements and critical UI to support E2E and screen readers.
+- **Images & assets**: Import images via [src/assets/images/index.ts](mdc:src/assets/images/index.ts). Use `react-native-fast-image` for remote images. Keep asset sizes reasonable.
+- **Error handling & UX**: Never swallow errors. Map service errors to friendly messages and surface via a single toast/snackbar pattern. Disable primary actions while submitting and prevent duplicate submits.
+- **State**: Use feature Containers to orchestrate data/state. Keep Screens presentational. Prefer Context only for cross-cutting concerns (theme, localization).
+- **Linting & formatting**: Run `yarn lint` and keep formatting consistent with Prettier before committing. Remove stray `console.*` calls.
+
