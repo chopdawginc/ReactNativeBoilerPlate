@@ -1,11 +1,28 @@
-import React from 'react'
-import useProfile from '../hooks/useProfile'
-import ProfileScreen from '../screens/ProfileScreen'
+import React from 'react';
+import {UserService} from '@services';
+import {transformData} from '@services';
+import useProfile from '../hooks/useProfile';
+import ProfileScreen from '../screens/ProfileScreen';
+import {useFirestorePaginationRealtime} from '@shared/hooks';
+
+const userService = new UserService();
 
 const ProfileContainer = () => {
-  const { user } = useProfile()
+  const {user} = useProfile();
 
-  return <ProfileScreen user={user} />
-}
+  // Example usage of useFirestorePaginationRealtime hook
+  const listUsers = useFirestorePaginationRealtime({
+    query: userService.listUsersQuery(),
+    pageSize: 10,
+    referenceFields: ['companyId', 'communityId'],
+    transformData: transformData,
+  });
 
-export default ProfileContainer
+  const {data, error, loading, loadMore, hasMore} = listUsers;
+
+  console.log(data);
+
+  return <ProfileScreen user={user} />;
+};
+
+export default ProfileContainer;

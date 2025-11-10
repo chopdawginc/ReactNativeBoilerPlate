@@ -1,7 +1,10 @@
 // user.ts
+import {Timestamp} from '@react-native-firebase/firestore';
+
 export interface User {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  createdAt: Date;
+  createdAt: Timestamp;
 }

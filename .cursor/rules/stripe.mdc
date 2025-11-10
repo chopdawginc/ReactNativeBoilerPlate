@@ -1,0 +1,53 @@
+---
+description: Stripe configuration and usage (React Native + Firebase Functions v2)
+alwaysApply: false
+---
+## Stripe Rules
+
+### Files & Structure
+- Create a single file if usage is minimal: `functions/src/stripe.ts`.
+- If there are many functions, split them into separate files:
+  - `functions/src/stripe/createPaymentIntent.ts`
+  - `functions/src/stripe/subscriptions.ts`
+  - `functions/src/stripe/webhook.ts`
+  - `functions/src/stripe/utils.ts`
+
+### Server-Side Validation
+- Validate **all client inputs** (amount, currency, product, user access).
+- Compute **amounts on the server** — never trust client values.
+- Return only **client secrets and minimal data** to the app.
+
+### Payment (One-Time)
+1. App asks server to **create PaymentIntent** (amount, currency, capture method).
+2. Server returns **client_secret** (+ next actions if any).
+3. App calls `confirmPayment(clientSecret, { paymentMethodType })`.
+4. App handles **3DS/SCA** if required.
+5. Final status is reconciled by **webhook → update Firestore**.
+
+### Subscriptions
+- Server creates/updates subscriptions and attaches a **default payment method**.
+- Use **Billing prices (`priceId`)**, not ad-hoc amounts.
+- Handle **trials, proration, and incomplete status (SCA)** via webhooks.
+- Products & Prices are configured in the **Stripe Dashboard**; always reference by `priceId`.
+- **Customer lifecycle**:
+  - Create Stripe customer on first paid action.
+  - Persist `stripeCustomerId` in Firestore.
+- Default payment method is attached via **subscription creation** or **SetupIntent**.
+- **Webhook events are the source of truth** for subscription status:
+  - `invoice.payment_succeeded`
+  - `customer.subscription.updated`
+
+### Webhook Rules
+- **Idempotency**: Upsert by `event.id`; track processed event IDs.
+- **Ordering**: Webhooks may arrive out of order — fetch the latest object state by ID.
+- Always **verify signatures** using `STRIPE_WEBHOOK_SECRET`.
+
+### Error Handling
+- Normalize Stripe errors to **app-friendly codes/messages**.
+- Surface next actions clearly (e.g., SCA challenges).
+
+### Versioning
+- Pin `STRIPE_API_VERSION` on the server.
+- Upgrade intentionally and document **breaking changes**.
+- Test flows before promoting to production.
+
