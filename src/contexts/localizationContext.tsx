@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import i18n from 'i18next'
 import { KEYS } from '@constant'
 import { en, fr } from '@languages'
-import { useAsyncStorage } from '@shared/hooks'
+import { useStorage } from '@shared/hooks'
 import { LocalizationContextType, ProviderProps } from '@types'
 import { initReactI18next, useTranslation } from 'react-i18next'
 
@@ -35,7 +35,7 @@ export const useLocalization = () => {
 
 export const LocalizationProvider: React.FC<ProviderProps> = ({ children }) => {
     const { t, i18n } = useTranslation()
-    const { fetchAsync, saveAsync } = useAsyncStorage()
+    const { get, set } = useStorage()
     const [currentLanguage, setCurrentLanguage] = useState<string>(i18n.language)
 
     useEffect(() => {
@@ -43,17 +43,17 @@ export const LocalizationProvider: React.FC<ProviderProps> = ({ children }) => {
     }, [])
 
     const getSavedLanguage = useCallback(async () => {
-        const fetchCurrentLangauge: any = await fetchAsync(KEYS.LANGUAGE)
+        const fetchCurrentLangauge: any = await get(KEYS.LANGUAGE)
         if (fetchCurrentLangauge) {
             setCurrentLanguage(fetchCurrentLangauge)
             i18n.changeLanguage(fetchCurrentLangauge)
         }
-    }, [])
+    }, [get])
 
 
     const changeLanguage = async (lng: string) => {
         i18n.changeLanguage(lng)
-        await saveAsync(KEYS.LANGUAGE, lng)
+        await set(KEYS.LANGUAGE, lng)
     }
 
     return (

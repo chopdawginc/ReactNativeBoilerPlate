@@ -16,11 +16,16 @@ export interface PermissionsState {
   notifications: PermissionStatus;
 }
 
-export interface AsyncStorageHook<T> {
-  fetchAsync: (key: string) => Promise<T | null>;
-  saveAsync: (key: string, value: T) => Promise<void>;
-  deleteAsync: (key: string) => Promise<void>;
+// Note: This interface now uses MMKV internally for better performance
+export interface StorageHook<T> {
+  get: (key: string) => Promise<T | null>;
+  set: (key: string, value: T) => Promise<void>;
+  remove: (key: string) => Promise<void>;
 }
+
+// Keep AsyncStorageHook for backward compatibility (deprecated)
+/** @deprecated Use StorageHook instead */
+export type AsyncStorageHook<T> = StorageHook<T>;
 
 export interface UseSearchHandlers {
   search: string;

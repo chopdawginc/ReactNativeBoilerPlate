@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { KEYS, THEME } from '@constant';
-import { useAsyncStorage } from '@shared/hooks';
+import { useStorage } from '@shared/hooks';
 import { LIGHT_MODE, DARK_MODE } from '@styles/theme';
 import { ThemeContextProps, ProviderProps } from '@types';
 
@@ -24,11 +24,11 @@ export const useTheme = () => {
 
 export const ThemeProvider: React.FC<ProviderProps> = ({ children }) => {
   const [colors, setColors] = useState(LIGHT_MODE);
-  const { fetchAsync, saveAsync } = useAsyncStorage();
+  const { get, set } = useStorage();
   const [currentTheme, setCurrentMode] = useState(THEME.LIGHT);
 
   const getSavedTheme = useCallback(async () => {
-    const fetchCurrentTheme = await fetchAsync(KEYS.THEME);
+    const fetchCurrentTheme = await get(KEYS.THEME);
     if (fetchCurrentTheme === THEME.DARK) {
       setCurrentMode(THEME.DARK);
       setColors(DARK_MODE);
@@ -36,7 +36,7 @@ export const ThemeProvider: React.FC<ProviderProps> = ({ children }) => {
       setCurrentMode(THEME.LIGHT);
       setColors(LIGHT_MODE);
     }
-  }, [fetchAsync]);
+  }, [get]);
 
   useEffect(() => {
     getSavedTheme();
@@ -46,10 +46,10 @@ export const ThemeProvider: React.FC<ProviderProps> = ({ children }) => {
     setCurrentMode(prevMode => {
       const newMode = prevMode === THEME.LIGHT ? THEME.DARK : THEME.LIGHT;
       setColors(newMode === THEME.LIGHT ? LIGHT_MODE : DARK_MODE);
-      saveAsync(KEYS.THEME, newMode);
+      set(KEYS.THEME, newMode);
       return newMode;
     });
-  }, [saveAsync]);
+  }, [set]);
 
   return (
     <ThemeContext.Provider
