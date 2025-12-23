@@ -3661,6 +3661,8 @@ __metadata:
     react-native-gesture-handler: ^2.28.0
     react-native-image-crop-picker: ^0.41.2
     react-native-keyboard-aware-scroll-view: ^0.9.5
+    react-native-mmkv: ^4.1.0
+    react-native-nitro-modules: ^0.32.0
     react-native-permissions: ^4.1.5
     react-native-responsive-screen: ^1.4.2
     react-native-safe-area-context: ^5.5.2
@@ -8928,6 +8930,27 @@ __metadata:
   peerDependencies:
     react-native: ">=0.48.4"
   checksum: 5eec2aedb886213dfed4c8428a443b565dce80ba9fcf5897171e4c8829d4dd64c5011ac004d93f29adfc83ad6f88c2838d1a5b45255dc4a49bd1c0a169245800
+  languageName: node
+  linkType: hard
+
+"react-native-mmkv@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "react-native-mmkv@npm:4.1.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-nitro-modules: "*"
+  checksum: e5da782735eb5dde98d747595e401e1a0fce9e9e8c4f047e6d58ecaf6bcb4d5497ebef1a3963281a7539000a128f3a8c08609e619512263b2dd2b1c7c7fef788
+  languageName: node
+  linkType: hard
+
+"react-native-nitro-modules@npm:^0.32.0":
+  version: 0.32.0
+  resolution: "react-native-nitro-modules@npm:0.32.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: cad3e8fa3aba6a052e9be54a1dda5080eeba320c8f1ccbed663a4de21f4c6b5df6d3732ba703fdb341a81beca8ee7a51fe17da666c07bee67d97347d0bf11887
   languageName: node
   linkType: hard
 

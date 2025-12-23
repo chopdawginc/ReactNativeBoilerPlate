@@ -6,14 +6,14 @@ const useProfile = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const data = await ProfileService.getProfile()
+      const data = await new ProfileService().getProfile()
       setUser(data)
     }
     fetchUser()
   }, [])
 
   const updateProfile = async (newData: { name: string }) => {
-    await ProfileService.updateProfile(newData)
+    await new ProfileService().updateProfile(newData)
     setUser(newData) // Update local state
   }
 

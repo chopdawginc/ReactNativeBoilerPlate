@@ -1,10 +1,10 @@
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV, type MMKV } from 'react-native-mmkv';
 
 class MMKVService {
   private storage: MMKV;
 
   constructor() {
-    this.storage = new MMKV();
+    this.storage = createMMKV();
   }
 
   /**
@@ -45,7 +45,7 @@ class MMKVService {
    */
   removeItem(key: string): void {
     try {
-      this.storage.delete(key);
+      this.storage.remove(key);
     } catch (error) {
       console.error(`MMKV: Failed to remove item with key "${key}":`, error);
     }
